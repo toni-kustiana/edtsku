@@ -51,9 +51,37 @@ implementation "io.insert-koin:koin-android:3.1.2"
 }
 ```
 ### API Service
-- Create folder assets on app folder add create edtsku.json to define base url and key header (if any)
+- Create folder assets on app folder add create edtsku.json to define base url
 ```json
-{"baseUrl":  "68747470733a2f2f656474736170702e696e646f6d61726574706f696e6b752e636f6d2f" , "key":  "6b752e636f6d2f"}
+{"baseUrl":  "68747470733a2f2f656474736170702e696e646f6d61726574706f696e6b752e636f6d2f", "trackerBaseUrl": "68747470733a2f2f617369612d736f75746865617374322d69646d2d636f72702d6465762e636c6f756466756e6374696f6e732e6e6574"}
 ```
+
+### Auth
+- We provide HttpHeaderLocalSource class for set token, key and other http header. Add class to your login repository, when login is success, add bearer token to http header local source. Here is example
+
+```kotlin
+class AccountRepository(private val remoteDataSource: AccountRemoteDataSource,
+    private val httpHeaderLocalSource: HttpHeaderLocalSource):
+    IAccountRepository {
+    override fun login(username: String, password: String): Flow<Result<LoginResponse?>> = flow {
+        emit(Result.loading())
+        val response = remoteDataSource.login(username, password)
+
+        when(response.status) {
+            Result.Status.SUCCESS -> {
+                if (response.data?.id_token != null) {
+                    httpHeaderLocalSource.setBearerToken(response.data?.id_token!!)
+                }
+                emit(Result.success(response.data))
+            }
+            else -> {
+                emit(Result.error<LoginResponse?>(response.code, response.message, null))
+            }
+        }
+    }
+
+}
+```
+
 
 
