@@ -57,6 +57,8 @@ implementation "io.insert-koin:koin-android:3.1.2"
 ```
 
 ### Auth
+
+##### Login
 - We provide HttpHeaderLocalSource class for set token, key and other http header. Add class to your login repository, when login is success, add bearer token to http header local source. Here is example
 
 ```kotlin
@@ -79,9 +81,13 @@ class AccountRepository(private val remoteDataSource: AccountRemoteDataSource,
             }
         }
     }
-
 }
 ```
-
-
+##### Check is Logged
+- On your above repository add method which call httpheaderlocalsource isLogged
+```kotlin
+    override fun isLogged(): Flow<Boolean> {
+        emit(httpHeaderLocalSource.isLogged())
+    }
+```
 
