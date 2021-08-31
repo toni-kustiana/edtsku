@@ -5,9 +5,8 @@ import android.content.Context
 import android.content.res.Resources
 import android.os.Build
 import android.provider.Settings.Secure
-import mypoin.indomaret.android.R
 import com.google.gson.annotations.SerializedName
-import mypoin.indomaret.android.constant.RemoteConfig
+import id.co.edtslib.R
 import java.util.*
 
 data class TrackerApps (
@@ -48,7 +47,7 @@ data class TrackerApps (
                 deviceID = UUID.randomUUID().toString()
             }
 
-            return TrackerApps(osName, osCode, className, familyName, RemoteConfig.getAppVersion(), deviceID)
+            return TrackerApps(osName, osCode, className, familyName, "1.0.0"/*abah RemoteConfig.getAppVersion()*/, deviceID)
         }
     }
 }

@@ -24,11 +24,7 @@ object PermissionUtil {
     }
 
     fun gpsPermission(activity: FragmentActivity, already: () -> Unit) {
-        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED ||
-            ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED
-        ) {
+        if (! isGpsAllowed(activity)) {
             ActivityCompat.requestPermissions(
                 activity,
                 arrayOf(
@@ -41,4 +37,11 @@ object PermissionUtil {
             already()
         }
     }
+
+    fun isGpsAllowed(activity: FragmentActivity) = (ActivityCompat.checkSelfPermission(activity,
+        Manifest.permission.ACCESS_FINE_LOCATION)
+            == PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION)
+            == PackageManager.PERMISSION_GRANTED
+            )
 }

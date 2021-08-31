@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
@@ -27,12 +29,12 @@ abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
         remoteConfigSetup()
 
         setup()
-
+/*
         if (getPageViewName() > 0) {
             baseViewModel.trackPage(getString(getPageViewName()))
         }
 
-        baseViewModel.trackFlush()
+        baseViewModel.trackFlush()*/
     }
 
     override fun onDestroy() {
@@ -52,7 +54,7 @@ abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
     }
 
     private fun remoteConfigSetup() {
-        /*val uri = "@xml/remote_config"
+        val uri = "@xml/remote_config"
         val resId = resources.getIdentifier(uri, "xml", packageName)
         if (resId != 0) {
             val mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
@@ -65,6 +67,6 @@ abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
             mFirebaseRemoteConfig.fetchAndActivate().addOnCompleteListener {
                 // nothing to do
             }
-        }*/
+        }
     }
 }

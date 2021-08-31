@@ -17,4 +17,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         configurationViewModel.getContactUs().observeForever {  }
     }
 
+    override fun getPageViewName() = 0
+
 }

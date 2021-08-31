@@ -13,8 +13,6 @@ abstract class BaseFragment<viewBinding : ViewBinding>: Fragment() {
     abstract fun getScreenName(): Int
     open fun isInAdapter() = false
 
-    protected lateinit var viewModel: BaseViewModel
-
     private var pageView: String? = null
 
     @Suppress("UNCHECKED_CAST")
@@ -22,7 +20,7 @@ abstract class BaseFragment<viewBinding : ViewBinding>: Fragment() {
         get() = _binding as viewBinding
 
     fun isNotNullBinding() = _binding != null
-
+/*
     protected fun isViewModelInitialized() = ::viewModel.isInitialized
 
     open fun show() {
@@ -40,7 +38,7 @@ abstract class BaseFragment<viewBinding : ViewBinding>: Fragment() {
             viewModel.trackUserImpressions(getString(getScreenName()))
         }
     }
-
+*/
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -57,11 +55,11 @@ abstract class BaseFragment<viewBinding : ViewBinding>: Fragment() {
         if (getScreenName() > 0 && ! isInAdapter()) {
             pageView = getString(getScreenName())
             if (pageView != null) {
-                viewModel.trackPage(pageView!!)
+                //viewModel.trackPage(pageView!!)
             }
         }
 
-        viewModel.trackFlush()
+        //viewModel.trackFlush()
     }
 
     abstract fun setup()

@@ -1,4 +1,4 @@
-package id.co.edtslib.domain.usecase
+package id.co.edtslib.domain.usecase.tracker
 
 import id.co.edtslib.domain.repository.ITrackerRepository
 import kotlinx.coroutines.flow.Flow

@@ -19,7 +19,10 @@ open class EdtsStartApplication(context: Context) {
                 listOf(
                     networkingModule,
                     sharedPreferencesModule,
-                    mainViewModel
+                    mainViewModel,
+                    mainAppModule,
+                    mainInteractorModule,
+                    mainRepositoryModule
                 )
             )
             modules(additionModules())

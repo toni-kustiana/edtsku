@@ -2,7 +2,7 @@ package id.co.edtslib.uibase
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import id.co.edtslib.domain.usecase.TrackerUseCase
+import id.co.edtslib.domain.usecase.tracker.TrackerUseCase
 
 open class BaseViewModel(
     private val trackerUseCase: TrackerUseCase

@@ -11,8 +11,10 @@ data class TrackerUser (
     @SerializedName("user_ip_address")
     val userIpAddress: String?
 ) {
+    /*
     companion object {
         @SuppressLint("HardwareIds")
+
         fun create(sessionId: String?, customerLocalDataSource: CustomerLocalDataSource) : TrackerUser {
             val session = customerLocalDataSource.getCached()
             return TrackerUser(
@@ -20,5 +22,5 @@ data class TrackerUser (
                 ConnectivityUtil.getIPAddress(true)
             )
         }
-    }
+    }*/
 }

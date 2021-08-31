@@ -3,6 +3,7 @@ package id.co.edtslib.data.source.remote.response
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.MalformedJsonException
+import id.co.edtslib.domain.model.ApiResponse
 import id.co.edtslib.util.ErrorMessage
 import okio.BufferedSource
 import retrofit2.Response
@@ -21,8 +22,8 @@ abstract class BaseDataSource {
             val code = response.code()
             if (response.isSuccessful) {
                 val body = response.body()
-                if (body != null) {
-                    return if (body is ApiResponse<*>) {
+                return if (body != null) {
+                    if (body is ApiResponse<*>) {
                         if (body.isSuccess()) {
                             Result.success(body)
                         } else {
@@ -31,9 +32,8 @@ abstract class BaseDataSource {
                     } else {
                         Result.success(body)
                     }
-                }
-                else {
-                    return Result.error("BODYNULL", ErrorMessage().connection(), null)
+                } else {
+                    Result.error("BODYNULL", ErrorMessage().connection(), null)
                 }
             }
             else {
