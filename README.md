@@ -97,7 +97,7 @@ class AccountRepository(private val remoteDataSource: AccountRemoteDataSource,
 ##### Quit Toast
 
 ![SlidingButton](https://i.ibb.co/qmD126B/toast.png)
-For enable toast quit please override isHomeActivity on your home activity, and set to tru
+For enable toast quit please override isHomeActivity on your home activity, and set to true
 ```kotlin
 override fun isHomeActivity() = true
 ```
