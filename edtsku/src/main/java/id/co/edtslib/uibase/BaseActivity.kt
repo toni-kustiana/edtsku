@@ -1,16 +1,24 @@
 package id.co.edtslib.uibase
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
+import id.co.edtslib.R
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
     private val baseViewModel: BaseViewModel by viewModel()
     private var _binding: ViewBinding? = null
+    private var toastQuit: Toast? = null
+    private var quit: Boolean = false
+    private var quitRunnable: Runnable? = null
+    private var handler: Handler? = null
 
     @Suppress("UNCHECKED_CAST")
     protected val binding: viewBinding
@@ -20,6 +28,7 @@ abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
     abstract fun getPageViewName(): Int
     abstract fun setup()
     open fun canBack() = false
+    open fun isHomeActivity() = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,11 +53,41 @@ abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
 
     override fun onBackPressed() {
         if (canBack()) {
-            try {
-                super.onBackPressed()
+            if (isHomeActivity()) {
+                if (quitRunnable != null) {
+                    handler?.removeCallbacks(quitRunnable!!)
+                }
+
+                if (quit) {
+                    toastQuit?.cancel()
+                    finishAffinity()
+                } else {
+                    quit = true
+
+                    quitRunnable = Runnable {
+                        toastQuit?.cancel()
+                        quit = false
+                    }
+
+                    toastQuit = Toast.makeText(
+                        this,
+                        R.string.tap_for_quit,
+                        Toast.LENGTH_LONG
+                    )
+                    toastQuit?.show()
+
+                    handler = Handler(Looper.myLooper()!!)
+                    if (quitRunnable != null) {
+                        handler?.postDelayed(quitRunnable!!, 3500)
+                    }
+                }
             }
-            catch (e: IllegalArgumentException) {
-                // nothing to do
+            else {
+                try {
+                    super.onBackPressed()
+                } catch (e: IllegalArgumentException) {
+                    // nothing to do
+                }
             }
         }
     }
