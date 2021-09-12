@@ -98,8 +98,39 @@ class AccountRepository(private val remoteDataSource: AccountRemoteDataSource,
 - solid and border color will adjust with your primary color
 - for positivenegativebutton style,  isslected=false -> negative button, isselected=true -> positive button
 
-![SlidingButton](https://i.ibb.co/8761X04/Screen-Shot-2021-09-12-at-11-48-20.png)
+![Button Style](https://i.ibb.co/8761X04/Screen-Shot-2021-09-12-at-11-48-20.png)
 
+#### Confirmation Dialog
+
+![Confirmation Dialog](https://i.ibb.co/cLMQPcP/confirmationdialog.jpg)
+
+Using this class to show dialog confrmation. 2 kind dialog: show one button action and two button action
+
+```kotlin
+/*
+imageResId: image resource id, set 0 for hide it
+onClickListener: action when user click the button
+*/
+fun showOneButton(activity: FragmentActivity, imageResId: Int, title: String,
+                 subTitle: String, buttonText: String,
+                 onClickListener: View.OnClickListener)
+
+/*
+imageResId: image resource id, set 0 for hide it
+positiveButtonListener: action when user click the up button
+negativeButtonListener: action when user click the bottom button
+*/                 
+fun showTwoButton(activity: FragmentActivity, imageResId: Int, title: String,
+                  subTitle: String, positiveButtonText: String, negativeButtonText: String,
+                  positiveButtonListener: View.OnClickListener,
+                  negativeButtonListener: View.OnClickListener?)
+                 
+```
+
+For close button, you can call
+```kotlin
+    ConfirmationDialog.close()
+```
 
 ##### Quit Toast
 
