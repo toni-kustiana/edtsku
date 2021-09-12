@@ -63,7 +63,7 @@ implementation "io.insert-koin:koin-android:3.1.2"
 
 ```kotlin
 class AccountRepository(private val remoteDataSource: AccountRemoteDataSource,
-    private val httpHeaderLocalSource: HttpHeaderLocalSource):
+                        private val httpHeaderLocalSource: HttpHeaderLocalSource):
     IAccountRepository {
     override fun login(username: String, password: String): Flow<Result<LoginResponse?>> = flow {
         emit(Result.loading())
@@ -87,12 +87,18 @@ class AccountRepository(private val remoteDataSource: AccountRemoteDataSource,
 - On your above repository add method which call httpheaderlocalsource isLogged
 ```kotlin
     override fun isLogged(): Flow<Boolean> {
-        emit(httpHeaderLocalSource.isLogged())
-    }
+    emit(httpHeaderLocalSource.isLogged())
+}
 ```
 
 ### Base Activity
 - Your activity must extends of BaseActivity
+
+#### Button Style
+- solid and border color will adjust with your primary color
+
+![SlidingButton](https://i.ibb.co/8761X04/Screen-Shot-2021-09-12-at-11-48-20.png)
+
 
 ##### Quit Toast
 
@@ -101,7 +107,6 @@ For enable toast quit please override isHomeActivity on your home activity, and 
 ```kotlin
 override fun isHomeActivity() = true
 ```
-
 
 
 
