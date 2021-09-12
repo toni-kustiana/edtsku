@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentActivity
 object PermissionUtil {
     const val CAMERA = 3520
     const val GPS = 3521
+    const val WRITE = 3522
 
     fun cameraPermission(activity: FragmentActivity, already: () -> Unit) {
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.CAMERA)
@@ -20,6 +21,20 @@ object PermissionUtil {
             )
         } else {
            already()
+        }
+    }
+
+    fun storagePermission(activity: FragmentActivity, already: () -> Unit) {
+        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                activity,
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                WRITE
+            )
+        } else {
+            already()
         }
     }
 

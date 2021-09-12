@@ -15,7 +15,7 @@ object IntentUtil {
 
     fun openMapNavigation(activity: FragmentActivity, lat: Double, lng: Double) {
         val gmmIntentUri =
-            Uri.parse("geo:$lat,$lng")
+            Uri.parse("google.navigation:q=$lat,$lng")
         val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
         activity.startActivity(mapIntent)
     }

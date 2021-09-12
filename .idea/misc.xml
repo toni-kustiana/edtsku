@@ -3,9 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.17300724637681159" />
+        <entry key="../../../../../layout/custom_preview.xml" value="0.2994791666666667" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.45" />
         <entry key="app/src/main/res/layout/dialog_bottom_test.xml" value="0.17300724637681159" />
         <entry key="edtsku/src/main/res/drawable/bg_bottom_sheet_dialog.xml" value="0.3314814814814815" />
+        <entry key="edtsku/src/main/res/drawable/bg_button_disabled.xml" value="0.12135416666666667" />
+        <entry key="edtsku/src/main/res/drawable/bg_button_negative.xml" value="0.23854166666666668" />
+        <entry key="edtsku/src/main/res/drawable/bg_button_positive.xml" value="0.23854166666666668" />
+        <entry key="edtsku/src/main/res/drawable/bg_button_positive_negative.xml" value="0.23854166666666668" />
+        <entry key="edtsku/src/main/res/layout/activity_popup.xml" value="0.2033514492753623" />
+        <entry key="edtsku/src/main/res/layout/app_bar_popup.xml" value="0.2033514492753623" />
         <entry key="edtsku/src/main/res/layout/dialog_bottom_sheet.xml" value="0.45" />
       </map>
     </option>

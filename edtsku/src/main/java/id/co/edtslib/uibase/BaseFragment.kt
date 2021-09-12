@@ -8,10 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 
 abstract class BaseFragment<viewBinding : ViewBinding>: Fragment() {
+    //private val baseViewModel: BaseViewModel by viewModel()
+
     private var _binding: ViewBinding? = null
     abstract val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> viewBinding
     abstract fun getScreenName(): Int
     open fun isInAdapter() = false
+    open fun canBack() = true
 
     private var pageView: String? = null
 
@@ -51,15 +54,16 @@ abstract class BaseFragment<viewBinding : ViewBinding>: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setup()
-
+/*
         if (getScreenName() > 0 && ! isInAdapter()) {
             pageView = getString(getScreenName())
             if (pageView != null) {
-                //viewModel.trackPage(pageView!!)
+                viewModel.trackPage(pageView!!)
             }
         }
 
-        //viewModel.trackFlush()
+        viewModel.trackFlush()
+ */
     }
 
     abstract fun setup()

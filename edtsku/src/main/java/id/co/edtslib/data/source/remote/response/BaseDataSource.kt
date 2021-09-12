@@ -3,6 +3,7 @@ package id.co.edtslib.data.source.remote.response
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.MalformedJsonException
+import id.co.edtslib.domain.model.ApiContentResponse
 import id.co.edtslib.domain.model.ApiResponse
 import id.co.edtslib.util.ErrorMessage
 import okio.BufferedSource
@@ -26,7 +27,15 @@ abstract class BaseDataSource {
                     if (body is ApiResponse<*>) {
                         if (body.isSuccess()) {
                             Result.success(body)
-                        } else {
+                        }
+                        else  if (body is ApiContentResponse<*>) {
+                            if (body.isSuccess()) {
+                                Result.success(body)
+                            } else {
+                                Result.error(body.status, body.message)
+                            }
+                        }
+                        else {
                             Result.error(body.status, body.message)
                         }
                     } else {

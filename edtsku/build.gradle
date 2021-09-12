@@ -66,6 +66,7 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:3.4.0"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
+    implementation "androidx.paging:paging-runtime-ktx:3.0.1"
 
     // fcm
 
@@ -104,4 +105,6 @@ dependencies {
     // skeleton
     implementation 'com.ethanhua:skeleton:1.1.2'
     implementation 'io.supercharge:shimmerlayout:2.1.0'
+    implementation 'androidx.webkit:webkit:1.4.0'
+
 }
