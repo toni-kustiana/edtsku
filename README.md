@@ -87,8 +87,8 @@ class AccountRepository(private val remoteDataSource: AccountRemoteDataSource,
 - On your above repository add method which call httpheaderlocalsource isLogged
 ```kotlin
     override fun isLogged(): Flow<Boolean> {
-    emit(httpHeaderLocalSource.isLogged())
-}
+        emit(httpHeaderLocalSource.isLogged())
+    }
 ```
 
 ### Base Activity
@@ -96,6 +96,7 @@ class AccountRepository(private val remoteDataSource: AccountRemoteDataSource,
 
 #### Button Style
 - solid and border color will adjust with your primary color
+- for positivenegativebutton style,  isslected=false -> negative button, isselected=true -> positive button
 
 ![SlidingButton](https://i.ibb.co/8761X04/Screen-Shot-2021-09-12-at-11-48-20.png)
 
@@ -107,6 +108,7 @@ For enable toast quit please override isHomeActivity on your home activity, and 
 ```kotlin
 override fun isHomeActivity() = true
 ```
+
 
 
 
