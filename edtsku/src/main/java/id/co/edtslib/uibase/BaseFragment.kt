@@ -12,7 +12,9 @@ abstract class BaseFragment<viewBinding : ViewBinding>: Fragment() {
 
     private var _binding: ViewBinding? = null
     abstract val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> viewBinding
-    abstract fun getScreenName(): Int
+
+    abstract fun getTrackerPageName(): Int
+
     open fun isInAdapter() = false
     open fun canBack() = true
 

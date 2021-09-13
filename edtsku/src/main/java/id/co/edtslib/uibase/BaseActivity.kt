@@ -25,8 +25,9 @@ abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
         get() = _binding as viewBinding
 
     abstract val bindingInflater: (LayoutInflater) -> viewBinding
-    abstract fun getPageViewName(): Int
+    abstract fun getTrackerPageName(): Int
     abstract fun setup()
+    
     open fun canBack() = false
     open fun isHomeActivity() = false
 
