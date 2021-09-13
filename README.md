@@ -19,41 +19,30 @@ dependencies {
 }
 ```
 
-### Usage
-
+### Koin MVVM
 - Create Class extend Application, and add to manifest android:name
+```xml
+<application
+    android:name=".App">
+</application>
+```
+- Initialize EdtsKu library with this static method
+
 ```kotlin
-    class App: Application() {
+// baseUrlApi: base urf of service api
+// modules: koin module you have
+fun init(application: Application, baseUrlApi: String, modules: List<Module>)
+```
+Here is example code
+
+```kotlin
+class App: Application() {
     override fun onCreate() {
         super.onCreate()
+        EdtsKu.init(this, "http://api.edtsku.com",
+            listOf(appModule, repositoryModule, viewModelModule))
     }
 }
-```
-- Register your module by extends EdtsStartApplication, like your api service module, and start edts application util
-```groovy
-    implementation "io.insert-koin:koin-core:3.1.2"
-implementation "io.insert-koin:koin-android:3.1.2"
-```
-
-```kotlin
-    class TestProjectStartApplication: EdtsStartApplication() {
-    override fun additionModules() = listOf(appModule, repositoryModule, viewModelModule)
-}
-```
-
-```kotlin
-    class App: Application() {
-    override fun onCreate() {
-        super.onCreate()
-
-        TestProjectStartApplication()
-    }
-}
-```
-### API Service
-- Create folder assets on app folder add create edtsku.json to define base url
-```json
-{"baseUrl":  "68747470733a2f2f656474736170702e696e646f6d61726574706f696e6b752e636f6d2f", "trackerBaseUrl": "68747470733a2f2f617369612d736f75746865617374322d69646d2d636f72702d6465762e636c6f756466756e6374696f6e732e6e6574"}
 ```
 
 ### Auth
@@ -87,8 +76,8 @@ class AccountRepository(private val remoteDataSource: AccountRemoteDataSource,
 - On your above repository add method which call httpheaderlocalsource isLogged
 ```kotlin
     override fun isLogged(): Flow<Boolean> {
-        emit(httpHeaderLocalSource.isLogged())
-    }
+    emit(httpHeaderLocalSource.isLogged())
+}
 ```
 
 ### Base Activity
@@ -112,19 +101,19 @@ imageResId: image resource id, set 0 for hide it
 onClickListener: action when user click the button
 */
 fun showOneButton(activity: FragmentActivity, imageResId: Int, title: String,
-                 subTitle: String, buttonText: String,
-                 onClickListener: View.OnClickListener)
+                  subTitle: String, buttonText: String,
+                  onClickListener: View.OnClickListener)
 
 /*
 imageResId: image resource id, set 0 for hide it
 positiveButtonListener: action when user click the up button
 negativeButtonListener: action when user click the bottom button
-*/                 
+*/
 fun showTwoButton(activity: FragmentActivity, imageResId: Int, title: String,
                   subTitle: String, positiveButtonText: String, negativeButtonText: String,
                   positiveButtonListener: View.OnClickListener,
                   negativeButtonListener: View.OnClickListener?)
-                 
+
 ```
 
 For close button, you can call
