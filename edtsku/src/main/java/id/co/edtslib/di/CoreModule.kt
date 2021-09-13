@@ -1,19 +1,14 @@
 package id.co.edtslib.di
 
-import android.content.Context
 import android.os.Build
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.securepreferences.SecurePreferences
 import id.co.edtslib.domain.repository.HttpHeaderLocalSource
-import id.co.edtslib.util.AndroidUtil
-import id.co.edtslib.util.CommonUtil
 import okhttp3.OkHttpClient
-import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -24,8 +19,7 @@ val networkingModule = module {
     single { provideGson() }
     single { provideGsonConverterFactory(get()) }
 
-    single(named("api")) { provideRetrofit(androidContext(), get(), get(), get(), get()) }
-    single(named("tracker")) { provideTrackerRetrofit(androidContext(), get(), get(), get(), get()) }
+    single(named("api")) { provideRetrofit(get(), get(), get()) }
 }
 
 val sharedPreferencesModule = module {
@@ -64,40 +58,12 @@ private fun provideGsonConverterFactory(gson: Gson): GsonConverterFactory =
     GsonConverterFactory.create(gson)
 
 private fun provideRetrofit(
-    context: Context,
-    gson: Gson,
     okHttpClient: OkHttpClient,
     converterFactory: GsonConverterFactory,
     httpHeaderLocalSource: HttpHeaderLocalSource
 ): Retrofit {
-    val json = AndroidUtil.loadJSONFromAsset(context, "edtsku.json")
-    val configure =  gson.fromJson<Configure>(json, object : TypeToken<Configure>() {}.type)
-
-    val baseUrl = CommonUtil.hexToAscii(configure.baseUrl)
-
     return Retrofit.Builder()
-        .baseUrl(baseUrl)
-        .client(okHttpClient.newBuilder().addInterceptor(AuthInterceptor(httpHeaderLocalSource)).build())
-        .addConverterFactory(converterFactory)
-        .build()
-}
-
-private fun provideTrackerRetrofit(
-    context: Context,
-    gson: Gson,
-    okHttpClient: OkHttpClient,
-    converterFactory: GsonConverterFactory,
-    httpHeaderLocalSource: HttpHeaderLocalSource
-): Retrofit {
-    val json = AndroidUtil.loadJSONFromAsset(context, "edtsku.json")
-    val configure =  gson.fromJson<Configure>(json, object : TypeToken<Configure>() {}.type)
-
-    val baseUrl = if (configure.trackerBaseUrl == null) "" else
-        CommonUtil.hexToAscii(configure.trackerBaseUrl)
-    //val key = if (configure.key == null) null else CommonUtil.hexToAscii(configure.key)
-
-    return Retrofit.Builder()
-        .baseUrl(baseUrl)
+        .baseUrl(EdtsKu.baseUrlApi)
         .client(okHttpClient.newBuilder().addInterceptor(AuthInterceptor(httpHeaderLocalSource)).build())
         .addConverterFactory(converterFactory)
         .build()
