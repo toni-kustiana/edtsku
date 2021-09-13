@@ -76,12 +76,35 @@ class AccountRepository(private val remoteDataSource: AccountRemoteDataSource,
 - On your above repository add method which call httpheaderlocalsource isLogged
 ```kotlin
     override fun isLogged(): Flow<Boolean> {
-    emit(httpHeaderLocalSource.isLogged())
-}
+        emit(httpHeaderLocalSource.isLogged())
+    }
 ```
 
 ### Base Activity
 - Your activity must extends of BaseActivity
+
+#### Abstract Method
+
+```kotlin
+// override fo define your initial activity
+abstract fun setup()
+
+// tracker page name string resource id
+abstract fun getTrackerPageName(): Int
+
+// false, user can't use back button for finish it, true vice versa
+open fun canBack() = false
+
+// see quit toast section
+open fun isHomeActivity() = false
+```
+##### Quit Toast
+
+![SlidingButton](https://i.ibb.co/qmD126B/toast.png)
+For enable toast quit please override isHomeActivity on your home activity, and set to true
+```kotlin
+override fun isHomeActivity() = true
+```
 
 #### Button Style
 - solid and border color will adjust with your primary color
@@ -101,34 +124,22 @@ imageResId: image resource id, set 0 for hide it
 onClickListener: action when user click the button
 */
 fun showOneButton(activity: FragmentActivity, imageResId: Int, title: String,
-                  subTitle: String, buttonText: String,
-                  onClickListener: View.OnClickListener)
+                 subTitle: String, buttonText: String,
+                 onClickListener: View.OnClickListener)
 
 /*
 imageResId: image resource id, set 0 for hide it
 positiveButtonListener: action when user click the up button
 negativeButtonListener: action when user click the bottom button
-*/
+*/                 
 fun showTwoButton(activity: FragmentActivity, imageResId: Int, title: String,
                   subTitle: String, positiveButtonText: String, negativeButtonText: String,
                   positiveButtonListener: View.OnClickListener,
                   negativeButtonListener: View.OnClickListener?)
-
+                 
 ```
 
 For close button, you can call
 ```kotlin
     ConfirmationDialog.close()
 ```
-
-##### Quit Toast
-
-![SlidingButton](https://i.ibb.co/qmD126B/toast.png)
-For enable toast quit please override isHomeActivity on your home activity, and set to true
-```kotlin
-override fun isHomeActivity() = true
-```
-
-
-
-
