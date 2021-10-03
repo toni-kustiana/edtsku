@@ -1,9 +1,12 @@
 package id.co.edtslib.util
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.webkit.WebViewCompat
 import java.io.IOException
@@ -53,6 +56,19 @@ object AndroidUtil {
         editText?.post {
             val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+        }
+    }
+
+    fun copyToClipboard(context: Context, label: String, source: String, onSuccess: () -> Unit) {
+        try {
+            val clipboard = ContextCompat.getSystemService(context, ClipboardManager::class.java)
+            val clip = ClipData.newPlainText(label,source)
+            clipboard?.setPrimaryClip(clip)
+
+            onSuccess()
+        }
+        catch (e: SecurityException) {
+            // nothing to
         }
     }
 }
