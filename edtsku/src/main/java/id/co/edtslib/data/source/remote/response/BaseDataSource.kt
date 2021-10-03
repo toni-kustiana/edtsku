@@ -47,7 +47,22 @@ abstract class BaseDataSource {
             }
             else {
                 if (code == 401) {
-                    return Result.unauthorized()
+                    @Suppress("BlockingMethodInNonBlockingContext")
+                    if (response.errorBody() != null) {
+                        val bufferedSource: BufferedSource = response.errorBody()!!.source()
+                        bufferedSource.request(Long.MAX_VALUE) // Buffer the entire body.
+
+                        val json = bufferedSource.buffer.clone().readString(Charset.forName("UTF8"))
+
+                        val badResponse = Gson().fromJson<ApiResponse<Any>?>(
+                            json,
+                            object : TypeToken<ApiResponse<Any>?>() {}.type
+                        )
+                        return Result.error(badResponse.status, badResponse.message)
+                    }
+                    else {
+                        return Result.unauthorized()
+                    }
                 } else
                     if (code == 400 || code == 500) {
                         @Suppress("BlockingMethodInNonBlockingContext")
