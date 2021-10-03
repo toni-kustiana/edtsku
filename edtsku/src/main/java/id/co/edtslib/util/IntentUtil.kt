@@ -3,7 +3,12 @@ package id.co.edtslib.util
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+import androidx.core.content.ContextCompat.startActivity
+
+
+
 
 object IntentUtil {
     fun openApplicationSetting(activity: FragmentActivity) {
@@ -19,4 +24,11 @@ object IntentUtil {
         val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
         activity.startActivity(mapIntent)
     }
+
+    fun call(activity: FragmentActivity, phone: String) {
+        val intent = Intent(Intent.ACTION_DIAL)
+        intent.data = Uri.parse("tel:$phone")
+        activity.startActivity(intent)
+    }
+
 }
