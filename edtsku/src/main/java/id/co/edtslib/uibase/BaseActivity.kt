@@ -10,6 +10,7 @@ import androidx.viewbinding.ViewBinding
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import id.co.edtslib.R
+import id.co.edtslib.tracker.Tracker
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
@@ -39,12 +40,12 @@ abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
         remoteConfigSetup()
 
         setup()
-/*
-        if (getPageViewName() > 0) {
-            baseViewModel.trackPage(getString(getPageViewName()))
+
+        if (getTrackerPageName() > 0) {
+            Tracker.trackPage(getString(getTrackerPageName()))
         }
 
-        baseViewModel.trackFlush()*/
+        //baseViewModel.trackFlush()
     }
 
     override fun onDestroy() {
