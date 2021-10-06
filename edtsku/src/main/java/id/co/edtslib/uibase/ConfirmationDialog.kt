@@ -9,6 +9,7 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.text.HtmlCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import id.co.edtslib.R
@@ -78,7 +79,7 @@ class ConfirmationDialog private constructor(context: Context) : Dialog(context)
         tvTitle.text = title
 
         val tvSubTitle = findViewById<TextView>(R.id.tvSubTitle)
-        tvSubTitle.text = subTitle
+        tvSubTitle.text = HtmlCompat.fromHtml(subTitle, HtmlCompat.FROM_HTML_MODE_LEGACY)
 
         val tvPositiveButton = findViewById<TextView>(R.id.tvPositiveButton)
         tvPositiveButton.text = positiveButtonText
