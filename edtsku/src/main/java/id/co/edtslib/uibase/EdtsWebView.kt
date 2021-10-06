@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.webkit.WebView
+import id.co.edtslib.di.EdtsKu
 
 @SuppressLint("SetJavaScriptEnabled")
 class EdtsWebView : WebView {
@@ -18,7 +19,7 @@ class EdtsWebView : WebView {
 
     init {
         post {
-            //setWebContentsDebuggingEnabled(BuildConfig.DEBUG)
+            setWebContentsDebuggingEnabled(EdtsKu.debugging)
 
             settings.javaScriptEnabled = true
             settings.domStorageEnabled = true
