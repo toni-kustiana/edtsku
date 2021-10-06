@@ -7,9 +7,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.core.content.ContextCompat.startActivity
 
-
-
-
 object IntentUtil {
     fun openApplicationSetting(activity: FragmentActivity) {
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
