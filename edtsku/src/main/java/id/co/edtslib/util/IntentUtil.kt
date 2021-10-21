@@ -1,5 +1,7 @@
 package id.co.edtslib.util
 
+import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
@@ -26,6 +28,25 @@ object IntentUtil {
         val intent = Intent(Intent.ACTION_DIAL)
         intent.data = Uri.parse("tel:$phone")
         activity.startActivity(intent)
+    }
+
+    fun openPlayStore(context: Context, packageName: String) {
+        try {
+            context.startActivity(Intent(Intent.ACTION_VIEW,
+                Uri.parse("market://details?id=$packageName")))
+        } catch (e: ActivityNotFoundException) {
+            context.startActivity(Intent(Intent.ACTION_VIEW,
+                Uri.parse("https://play.google.com/store/apps/details?id=$packageName")))
+        }
+    }
+
+    fun openLink(context: Context, url: String) {
+        try {
+            context.startActivity(Intent(Intent.ACTION_VIEW,
+                Uri.parse(url)))
+        } catch (e: ActivityNotFoundException) {
+            // ignore it
+        }
     }
 
 }
