@@ -76,8 +76,8 @@ class AccountRepository(private val remoteDataSource: AccountRemoteDataSource,
 - On your above repository add method which call httpheaderlocalsource isLogged
 ```kotlin
     override fun isLogged(): Flow<Boolean> {
-        emit(httpHeaderLocalSource.isLogged())
-    }
+    emit(httpHeaderLocalSource.isLogged())
+}
 ```
 
 ### Base Activity
@@ -124,22 +124,60 @@ imageResId: image resource id, set 0 for hide it
 onClickListener: action when user click the button
 */
 fun showOneButton(activity: FragmentActivity, imageResId: Int, title: String,
-                 subTitle: String, buttonText: String,
-                 onClickListener: View.OnClickListener)
+                  subTitle: String, buttonText: String,
+                  onClickListener: View.OnClickListener)
 
 /*
 imageResId: image resource id, set 0 for hide it
 positiveButtonListener: action when user click the up button
 negativeButtonListener: action when user click the bottom button
-*/                 
+*/
 fun showTwoButton(activity: FragmentActivity, imageResId: Int, title: String,
                   subTitle: String, positiveButtonText: String, negativeButtonText: String,
                   positiveButtonListener: View.OnClickListener,
                   negativeButtonListener: View.OnClickListener?)
-                 
+
 ```
 
 For close button, you can call
 ```kotlin
     ConfirmationDialog.close()
+```
+#### Utilitas
+##### AndroidUtil
+```kotlin
+    // check is webview installed on
+    // success: callback function when webview already installed
+    fun checkWebAvailable(activity: FragmentActivity, success: () -> Unit)
+    
+    // copy source to clipboard
+    // onSuccess: callback function when copied
+    fun copyToClipboard(context: Context, label: String, source: String, onSuccess: () -> Unit)
+    
+    // force close soft keyboard
+    fun hideKeyboard(activity: FragmentActivity) 
+    
+    // read contents from asset file
+    // jsonFileName: json filename under assets folder
+    fun loadJSONFromAsset(context: Context, jsonFileName: String): String?
+    
+    // force show soft keyboard
+    fun showKeyboard(activity: FragmentActivity, editText: EditText?)
+```
+##### DateTimeUtil
+```kotlin
+    // convert date to format like 2021-10-06T15:16:00.000Z 
+    fun getUTCString(date: Date): String
+```
+
+##### IntentUtil
+```kotlin
+    // open call intent
+    fun call(activity: FragmentActivity, phone: String)
+    
+    // open android application setting intent
+    fun openApplicationSetting(activity: FragmentActivity)
+    
+    // open map navigation intent from lat,lng to current position
+    fun openMapNavigation(activity: FragmentActivity, lat: Double, lng: Double)
 ```
