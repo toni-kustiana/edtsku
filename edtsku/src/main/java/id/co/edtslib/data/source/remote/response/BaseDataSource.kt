@@ -48,21 +48,31 @@ abstract class BaseDataSource {
             else {
                 if (code == 401) {
                     @Suppress("BlockingMethodInNonBlockingContext")
-                    if (response.errorBody() != null) {
-                        val bufferedSource: BufferedSource = response.errorBody()!!.source()
-                        bufferedSource.request(Long.MAX_VALUE) // Buffer the entire body.
+                    (return if (response.errorBody() != null) {
+                        try {
+                            val bufferedSource: BufferedSource = response.errorBody()!!.source()
+                            bufferedSource.request(Long.MAX_VALUE) // Buffer the entire body.
 
-                        val json = bufferedSource.buffer.clone().readString(Charset.forName("UTF8"))
+                            val json =
+                                bufferedSource.buffer.clone().readString(Charset.forName("UTF8"))
 
-                        val badResponse = Gson().fromJson<ApiResponse<Any>?>(
-                            json,
-                            object : TypeToken<ApiResponse<Any>?>() {}.type
-                        )
-                        return Result.error(badResponse.status, badResponse.message)
-                    }
-                    else {
-                        return Result.unauthorized()
-                    }
+                            val badResponse = Gson().fromJson<ApiResponse<Any>?>(
+                                json,
+                                object : TypeToken<ApiResponse<Any>?>() {}.type
+                            )
+                            if (badResponse.data != null) {
+                                Result.error(badResponse.status, badResponse.message)
+                            }
+                            else {
+                                Result.unauthorized()
+                            }
+                        }
+                        catch (e: Exception) {
+                            Result.unauthorized()
+                        }
+                    } else {
+                        Result.unauthorized()
+                    })
                 } else
                     if (code == 400 || code == 500) {
                         @Suppress("BlockingMethodInNonBlockingContext")
