@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -67,19 +68,22 @@ class ConfirmationDialog private constructor(context: Context) : Dialog(context)
         setContentView(R.layout.dialog_confirmation)
         window?.decorView?.setBackgroundResource(android.R.color.transparent)
 
+        val tvTitle = findViewById<TextView>(R.id.tvTitle)
+        tvTitle.text = title
+
+        val tvSubTitle = findViewById<TextView>(R.id.tvSubTitle)
+        tvSubTitle.text = HtmlCompat.fromHtml(subTitle, HtmlCompat.FROM_HTML_MODE_LEGACY)
+
         val imageView = findViewById<ImageView>(R.id.imageView)
         if (imageResId != 0) {
             imageView.setImageResource(imageResId)
         }
         else {
             imageView.isVisible = false
+
+            tvTitle.gravity = Gravity.LEFT
+            tvSubTitle.gravity = Gravity.LEFT
         }
-
-        val tvTitle = findViewById<TextView>(R.id.tvTitle)
-        tvTitle.text = title
-
-        val tvSubTitle = findViewById<TextView>(R.id.tvSubTitle)
-        tvSubTitle.text = HtmlCompat.fromHtml(subTitle, HtmlCompat.FROM_HTML_MODE_LEGACY)
 
         val tvPositiveButton = findViewById<TextView>(R.id.tvPositiveButton)
         tvPositiveButton.text = positiveButtonText
