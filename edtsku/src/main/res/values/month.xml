@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="january">Januari</string>
+    <string name="february">Februari</string>
+    <string name="march">Maret</string>
+    <string name="april">April</string>
+    <string name="may">Mei</string>
+    <string name="june">Juni</string>
+    <string name="july">Juli</string>
+    <string name="august">Agustus</string>
+    <string name="september">September</string>
+    <string name="october">Oktober</string>
+    <string name="november">November</string>
+    <string name="december">Desember</string>
+
+    <string name="january_mmm">Jan</string>
+    <string name="february_mmm">Feb</string>
+    <string name="march_mmm">Mar</string>
+    <string name="april_mmm">Apr</string>
+    <string name="may_mmm">Mei</string>
+    <string name="june_mmm">Jun</string>
+    <string name="july_mmm">Jul</string>
+    <string name="august_mmm">Agu</string>
+    <string name="september_mmm">Sep</string>
+    <string name="october_mmm">Okt</string>
+    <string name="november_mmm">Nov</string>
+    <string name="december_mmm">Des</string>
+</resources>
