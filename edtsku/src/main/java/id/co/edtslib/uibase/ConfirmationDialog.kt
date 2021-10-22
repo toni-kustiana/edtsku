@@ -37,22 +37,23 @@ class ConfirmationDialog private constructor(context: Context) : Dialog(context)
                           positiveButtonListener: View.OnClickListener,
                           negativeButtonListener: View.OnClickListener?) {
 
-            if (dialog == null) {
-                dialog = ConfirmationDialog(activity)
-                dialog?.setCancelable(false)
-                dialog?.show(
-                    imageResId, title, subTitle,
-                    positiveButtonText, negativeButtonText,
-                    positiveButtonListener, negativeButtonListener
-                )
-
-                val width = Resources.getSystem().displayMetrics.widthPixels * 0.9f
-                dialog?.window?.setLayout(
-                    width.toInt(),
-                    WindowManager.LayoutParams.WRAP_CONTENT
-                )
+            if (dialog != null) {
+                close()
             }
 
+            dialog = ConfirmationDialog(activity)
+            dialog?.setCancelable(false)
+            dialog?.show(
+                imageResId, title, subTitle,
+                positiveButtonText, negativeButtonText,
+                positiveButtonListener, negativeButtonListener
+            )
+
+            val width = Resources.getSystem().displayMetrics.widthPixels * 0.9f
+            dialog?.window?.setLayout(
+                width.toInt(),
+                WindowManager.LayoutParams.WRAP_CONTENT
+            )
         }
 
         fun close() {
