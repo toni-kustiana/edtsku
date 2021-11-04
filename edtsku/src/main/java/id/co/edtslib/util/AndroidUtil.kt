@@ -1,8 +1,10 @@
 package id.co.edtslib.util
 
+import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.os.Build
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
@@ -70,5 +72,31 @@ object AndroidUtil {
         catch (e: SecurityException) {
             // nothing to
         }
+    }
+
+    fun isCloning(activity: FragmentActivity, packageName: String): Boolean {
+        if (activity.packageName != packageName) {
+            return true
+        }
+
+        val path = activity.filesDir.path
+        val p = packageName.split(".")
+
+        if (path.contains("999")) {
+            return true
+        }
+
+        if (!path.contains(packageName)) {
+            return true
+        }
+
+        var count = 0
+        for (i in path.indices) {
+            if (path[i] == '.') {
+                count++
+            }
+        }
+
+        return count > p.size
     }
 }
