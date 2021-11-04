@@ -17,7 +17,7 @@ open class ProcessResult<T>(result: Result<T>, delegate: ProcessResultDelegate<T
                     }
                 }
             }
-            Result.Status.UNAUTHORIZED -> delegate?.unAuthorize()
+            Result.Status.UNAUTHORIZED -> delegate?.unAuthorize(result.message)
             Result.Status.SUCCESS -> delegate?.success(result.data)
         }
     }
