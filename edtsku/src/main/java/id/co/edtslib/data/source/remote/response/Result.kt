@@ -19,8 +19,8 @@ data class Result<out T>(val status: Status, val data: T?, val code: String?,
             return Result(Status.ERROR, data, code, message)
         }
 
-        fun <T> unauthorized(): Result<T> {
-            return Result(Status.UNAUTHORIZED, null, null, null)
+        fun <T> unauthorized(message: String?): Result<T> {
+            return Result(Status.UNAUTHORIZED, null, null, message)
         }
 
         fun <T> loading(data: T? = null): Result<T> {
