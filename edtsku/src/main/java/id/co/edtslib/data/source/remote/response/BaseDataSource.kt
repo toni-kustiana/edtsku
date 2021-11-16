@@ -64,7 +64,7 @@ abstract class BaseDataSource {
                                 Result.unauthorized(badResponse.message)
                             }
                             else {
-                                Result.unauthorized(json)
+                                Result.unauthorized(badResponse.message)
                             }
                         }
                         catch (e: Exception) {
