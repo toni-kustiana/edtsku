@@ -7,6 +7,17 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 object DateTimeUtil {
+    fun getGMTDate(date: String): Date? {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+            Locale.getDefault())
+        return try {
+            dateFormat.parse(date)
+        }
+        catch (e: ParseException) {
+            null
+        }
+    }
+
     fun getUTCDate(date: String): Date? {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
             Locale.getDefault())
