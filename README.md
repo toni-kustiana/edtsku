@@ -15,7 +15,7 @@ allprojects {
 Add this to your app `build.gradle`:
 ```groovy
 dependencies {
-    implementation 'com.github.edstlib:edtsku:latest'
+    implementation 'com.github.edtslib:edtsku:latest'
 }
 ```
 
@@ -32,6 +32,10 @@ dependencies {
 // baseUrlApi: base urf of service api
 // modules: koin module you have
 fun init(application: Application, baseUrlApi: String, modules: List<Module>)
+
+// with initial function
+fun init(application: Application, baseUrlApi: String, modules: List<Module>,
+         initEx:  (koin: KoinApplication) -> Unit )
 ```
 Here is example code
 
