@@ -15,7 +15,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
     private val baseViewModel: BaseViewModel by viewModel()
-    private var _binding: ViewBinding? = null
+    protected var _binding: ViewBinding? = null
     private var toastQuit: Toast? = null
     private var quit: Boolean = false
     private var quitRunnable: Runnable? = null

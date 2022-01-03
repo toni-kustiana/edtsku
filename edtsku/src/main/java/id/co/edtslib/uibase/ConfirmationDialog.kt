@@ -23,6 +23,7 @@ class ConfirmationDialog private constructor(context: Context) : Dialog(context)
     private var negativeButtonText = ""
     private var positiveButtonListener: View.OnClickListener? = null
     private var negativeButtonListener: View.OnClickListener? = null
+    private var reverse = false
 
     companion object {
         private var dialog: ConfirmationDialog? = null
@@ -46,7 +47,31 @@ class ConfirmationDialog private constructor(context: Context) : Dialog(context)
             dialog?.show(
                 imageResId, title, subTitle,
                 positiveButtonText, negativeButtonText,
-                positiveButtonListener, negativeButtonListener
+                positiveButtonListener, negativeButtonListener, false
+            )
+
+            val width = Resources.getSystem().displayMetrics.widthPixels * 0.9f
+            dialog?.window?.setLayout(
+                width.toInt(),
+                WindowManager.LayoutParams.WRAP_CONTENT
+            )
+        }
+
+        fun showTwoButtonReverse(activity: FragmentActivity, imageResId: Int, title: String,
+                          subTitle: String, positiveButtonText: String, negativeButtonText: String,
+                          positiveButtonListener: View.OnClickListener,
+                          negativeButtonListener: View.OnClickListener?) {
+
+            if (dialog != null) {
+                close()
+            }
+
+            dialog = ConfirmationDialog(activity)
+            dialog?.setCancelable(false)
+            dialog?.show(
+                imageResId, title, subTitle,
+                positiveButtonText, negativeButtonText,
+                positiveButtonListener, negativeButtonListener, true
             )
 
             val width = Resources.getSystem().displayMetrics.widthPixels * 0.9f
@@ -57,8 +82,13 @@ class ConfirmationDialog private constructor(context: Context) : Dialog(context)
         }
 
         fun close() {
-            dialog?.dismiss()
-            dialog  = null
+            try {
+                dialog?.dismiss()
+                dialog = null
+            }
+            catch (e: Exception) {
+                // ignore it
+            }
         }
     }
 
@@ -66,7 +96,7 @@ class ConfirmationDialog private constructor(context: Context) : Dialog(context)
         super.onCreate(savedInstanceState)
 
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        setContentView(R.layout.dialog_confirmation)
+        setContentView(if (reverse) R.layout.dialog_confirmation_reverse else R.layout.dialog_confirmation)
         window?.decorView?.setBackgroundResource(android.R.color.transparent)
 
         val tvTitle = findViewById<TextView>(R.id.tvTitle)
@@ -102,7 +132,7 @@ class ConfirmationDialog private constructor(context: Context) : Dialog(context)
 
     fun show(imageResId: Int, title: String, subTitle: String, positiveButtonText: String,
              negativeButtonText: String, positiveButtonListener: View.OnClickListener,
-             negativeButtonListener: View.OnClickListener?) {
+             negativeButtonListener: View.OnClickListener?, reverse: Boolean) {
         this.imageResId = imageResId
         this.title = title
         this.subTitle = subTitle
@@ -110,6 +140,7 @@ class ConfirmationDialog private constructor(context: Context) : Dialog(context)
         this.negativeButtonText = negativeButtonText
         this.positiveButtonListener = positiveButtonListener
         this.negativeButtonListener = negativeButtonListener
+        this.reverse = reverse
 
         super.show()
     }
