@@ -5,9 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
-import androidx.core.content.ContextCompat
+import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
-import androidx.core.content.ContextCompat.startActivity
+import java.lang.Exception
 
 object IntentUtil {
     fun openApplicationSetting(activity: FragmentActivity) {
@@ -18,16 +18,26 @@ object IntentUtil {
     }
 
     fun openMapNavigation(activity: FragmentActivity, lat: Double, lng: Double) {
-        val gmmIntentUri =
-            Uri.parse("google.navigation:q=$lat,$lng")
-        val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
-        activity.startActivity(mapIntent)
+        try {
+            val gmmIntentUri =
+                Uri.parse("google.navigation:q=$lat,$lng")
+            val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+            activity.startActivity(mapIntent)
+        }
+        catch (e: Exception) {
+            Toast.makeText(activity, "Hp tidak mendukung fitur membuka navigasi peta", Toast.LENGTH_LONG).show()
+        }
     }
 
     fun call(activity: FragmentActivity, phone: String) {
-        val intent = Intent(Intent.ACTION_DIAL)
-        intent.data = Uri.parse("tel:$phone")
-        activity.startActivity(intent)
+        try {
+            val intent = Intent(Intent.ACTION_DIAL)
+            intent.data = Uri.parse("tel:$phone")
+            activity.startActivity(intent)
+        }
+        catch (e: Exception) {
+            Toast.makeText(activity, "Hp tidak mendukung fitur membuka navigasi peta", Toast.LENGTH_LONG).show()
+        }
     }
 
     fun openPlayStore(context: Context, packageName: String) {
