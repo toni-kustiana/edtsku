@@ -5,7 +5,7 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 
 val appModule = module {
-    single { provideApiService(get(named("api"))) }
+    single { provideApiService(get(named("edtsku"))) }
 }
 
 private fun provideApiService(retrofit: Retrofit): ApiService =
