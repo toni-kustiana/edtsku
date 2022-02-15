@@ -7,6 +7,7 @@
         <shape android:shape="rectangle">
             <corners android:radius="@dimen/dimen_4dp" />
             <stroke android:color="@color/colorBlack30" android:width="@dimen/dimen_1dp" />
+            <solid android:color="@color/white" />
         </shape>
     </item>
 </ripple>
