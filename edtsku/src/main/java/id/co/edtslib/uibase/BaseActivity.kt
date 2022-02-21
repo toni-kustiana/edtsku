@@ -15,15 +15,15 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
     private val baseViewModel: BaseViewModel by viewModel()
-    protected var _binding: ViewBinding? = null
+    private var _binding: ViewBinding? = null
     private var toastQuit: Toast? = null
     private var quit: Boolean = false
     private var quitRunnable: Runnable? = null
     private var handler: Handler? = null
 
     @Suppress("UNCHECKED_CAST")
-    protected val binding: viewBinding
-        get() = _binding as viewBinding
+    protected val binding: viewBinding?
+        get() = _binding as viewBinding?
 
     abstract val bindingInflater: (LayoutInflater) -> viewBinding
     abstract fun getTrackerPageName(): Int
@@ -50,7 +50,7 @@ abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        _binding = null
+        //_binding = null
     }
 
     override fun onBackPressed() {
