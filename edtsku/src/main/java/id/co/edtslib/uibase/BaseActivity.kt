@@ -22,8 +22,8 @@ abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
     private var handler: Handler? = null
 
     @Suppress("UNCHECKED_CAST")
-    protected val binding: viewBinding?
-        get() = _binding as viewBinding?
+    protected val binding: viewBinding
+        get() = _binding as viewBinding
 
     abstract val bindingInflater: (LayoutInflater) -> viewBinding
     abstract fun getTrackerPageName(): Int
