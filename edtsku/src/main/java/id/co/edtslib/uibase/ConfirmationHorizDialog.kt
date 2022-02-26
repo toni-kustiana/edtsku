@@ -2,8 +2,11 @@ package id.co.edtslib.uibase
 
 import android.content.Context
 import android.content.res.Resources
+import android.os.Bundle
+import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
+import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import id.co.edtslib.R
 
@@ -46,4 +49,16 @@ class ConfirmationHorizDialog private constructor(context: Context) : Confirmati
     }
 
     override fun layout() = R.layout.dialog_confirmation_horiz
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val tvTitle = findViewById<TextView>(R.id.tvTitle)
+        val tvSubTitle = findViewById<TextView>(R.id.tvSubTitle)
+
+        tvTitle.gravity = Gravity.CENTER
+        tvSubTitle.gravity = Gravity.CENTER
+
+
+    }
 }
