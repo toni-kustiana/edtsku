@@ -15,7 +15,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import id.co.edtslib.R
 
-class ConfirmationDialog private constructor(context: Context) : Dialog(context) {
+open class ConfirmationDialog protected constructor(context: Context) : Dialog(context) {
     private var imageResId = 0
     private var title = ""
     private var subTitle = ""
@@ -92,14 +92,18 @@ class ConfirmationDialog private constructor(context: Context) : Dialog(context)
         }
     }
 
+    open fun layout() = if (reverse) R.layout.dialog_confirmation_reverse else
+        R.layout.dialog_confirmation
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        setContentView(if (reverse) R.layout.dialog_confirmation_reverse else R.layout.dialog_confirmation)
+        setContentView(layout())
         window?.decorView?.setBackgroundResource(android.R.color.transparent)
 
         val tvTitle = findViewById<TextView>(R.id.tvTitle)
+        tvTitle.isVisible = title.isNotEmpty()
         tvTitle.text = title
 
         val tvSubTitle = findViewById<TextView>(R.id.tvSubTitle)
