@@ -50,7 +50,8 @@ val sharedPreferencesModule = module {
     }
 }
 
-private fun provideOkHttpClient(): OkHttpClient = UnsafeOkHttpClient().get()
+private fun provideOkHttpClient(): OkHttpClient = if (EdtsKu.sslDomain.isNotEmpty() && EdtsKu.sslPinner.isNotEmpty())
+    SafeOkHttpClient().get() else UnsafeOkHttpClient().get()
 
 private fun provideGson(): Gson = Gson()
 
