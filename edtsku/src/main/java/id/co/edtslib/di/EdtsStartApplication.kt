@@ -10,7 +10,7 @@ import org.koin.core.module.Module
 class EdtsKu {
     companion object {
         var sslDomain = ""
-        val sslPinner = ""
+        var sslPinner = ""
         var baseUrlApi = ""
         var debugging = false
 
