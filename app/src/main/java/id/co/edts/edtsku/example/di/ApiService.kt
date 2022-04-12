@@ -1,11 +1,14 @@
 package id.co.edts.edtsku.example.di
 
+import id.co.edts.edtsku.example.data.LoginResponse
 import id.co.edtslib.domain.model.ApiResponse
 import retrofit2.Response
-import retrofit2.http.GET
+import retrofit2.http.Body
+import retrofit2.http.POST
 
 interface ApiService {
-    @GET("configuration/api/mobile/contact-us/get-contact-us")
-    suspend fun getContactUs(): Response<ApiResponse<Any?>>
+    @POST("/api/app/authenticate")
+    suspend fun login(@Body request: LoginRequest)
+            : Response<ApiResponse<LoginResponse?>>
 
 }

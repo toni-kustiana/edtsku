@@ -6,5 +6,5 @@ import id.co.edtslib.uibase.BaseViewModel
 
 class ConfigurationViewModel(private val configurationUseCase: ConfigurationUseCase
 ): BaseViewModel() {
-    fun getContactUs() = configurationUseCase.getContactUs().asLiveData()
+    fun login() = configurationUseCase.login().asLiveData()
 }

@@ -6,6 +6,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
+import javax.net.ssl.TrustManagerFactory
 
 class EdtsKu {
     companion object {
@@ -13,6 +14,7 @@ class EdtsKu {
         var sslPinner = ""
         var baseUrlApi = ""
         var debugging = false
+        var trustManagerFactory: TrustManagerFactory? = null
 
         fun init(application: Application, baseUrlApi: String, modules: List<Module>) {
             EdtsKu.baseUrlApi = baseUrlApi
