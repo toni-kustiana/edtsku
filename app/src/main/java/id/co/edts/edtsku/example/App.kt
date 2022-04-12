@@ -4,7 +4,6 @@ import android.app.Application
 import id.co.edts.edtsku.example.di.appModule
 import id.co.edts.edtsku.example.di.repositoryModule
 import id.co.edts.edtsku.example.di.viewModelModule
-import id.co.edtslib.BuildConfig
 import id.co.edtslib.di.EdtsKu
 import timber.log.Timber
 
@@ -13,9 +12,15 @@ class App: Application() {
     override fun onCreate() {
         super.onCreate()
 
-        Timber.plant(Timber.DebugTree())
+        //val cert: InputStream = baseContext.resources.openRawResource(R.raw.elevenia_co_id)
 
-        EdtsKu.init(this, "http://emart-dev.elevenia.co.id",
+        Timber.plant(Timber.DebugTree())
+        EdtsKu.debugging = true
+        //EdtsKu.trustManagerFactory = CertUtil.getTrustManager(cert)
+        //EdtsKu.sslPinner = CommonUtil.hexToAscii("7368613235362f71316e6673616d64614d666a44464b6e54367574315433614c73783250383851754257445a6a595a7048733d")
+        //EdtsKu.sslDomain = CommonUtil.hexToAscii("656c6576656e69612e636f2e6964")
+
+        EdtsKu.init(this, "https://emart.elevenia.co.id",
             listOf(appModule, repositoryModule, viewModelModule))
     }
 }
