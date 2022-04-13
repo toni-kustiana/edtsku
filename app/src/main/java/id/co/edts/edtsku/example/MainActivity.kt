@@ -1,12 +1,15 @@
 package id.co.edts.edtsku.example
 
 import android.view.LayoutInflater
+import androidx.lifecycle.lifecycleScope
 import id.co.edts.edtsku.example.data.LoginResponse
 import id.co.edts.edtsku.example.databinding.ActivityMainBinding
 import id.co.edtslib.data.source.remote.response.ProcessResult
 import id.co.edtslib.data.source.remote.response.ProcessResultDelegate
 import id.co.edtslib.uibase.BaseActivity
 import id.co.edtslib.uibase.ConfirmationHorizDialog
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
