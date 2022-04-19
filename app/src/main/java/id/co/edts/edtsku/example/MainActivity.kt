@@ -1,5 +1,6 @@
 package id.co.edts.edtsku.example
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import androidx.lifecycle.lifecycleScope
 import id.co.edts.edtsku.example.data.LoginResponse
@@ -32,16 +33,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                    binding.textview.text = message
                }
 
+               @SuppressLint("SetTextI18n")
                override fun success(data: LoginResponse?) {
                    binding.textview.text = "sukses $data"
                }
 
+               @SuppressLint("SetTextI18n")
                override fun errorConnection() {
                    binding.textview.text = "errorConnection"
                }
 
                override fun errorSystem() {
-                   binding.textview.text = "errorSystem"
+                   binding.textview.text = it.message
                }
            })
        }
