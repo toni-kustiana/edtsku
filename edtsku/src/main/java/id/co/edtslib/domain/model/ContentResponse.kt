@@ -1,9 +1,15 @@
 package id.co.edtslib.domain.model
 
+import com.google.gson.annotations.SerializedName
+
 data class ContentResponse<T> (
+    @SerializedName("content")
     val content: T?,
+    @SerializedName("pageable")
     val pageable: PageableData?,
+    @SerializedName("totalPages")
     val totalPages: Int?,
+    @SerializedName("additionalData")
     val additionalData: Map<String, Any>?
 ) {
     fun getTotalPages() = totalPages ?: 0
