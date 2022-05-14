@@ -16,6 +16,7 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.Exception
 
 val networkingModule = module {
     single { provideOkHttpClient() }
@@ -30,28 +31,40 @@ val sharedPreferencesModule = module {
         if (EdtsKu.debugging) {
             PreferenceManager.getDefaultSharedPreferences(androidContext())
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                val spec = KeyGenParameterSpec.Builder(
-                    MasterKey.DEFAULT_MASTER_KEY_ALIAS,
-                    KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
-                )
-                    .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
-                    .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
-                    .setKeySize(MasterKey.DEFAULT_AES_GCM_MASTER_KEY_SIZE)
-                    .build()
-                val masterKey = MasterKey.Builder(get())
-                    .setKeyGenParameterSpec(spec)
-                    .build()
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    val spec = KeyGenParameterSpec.Builder(
+                        MasterKey.DEFAULT_MASTER_KEY_ALIAS,
+                        KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
+                    )
+                        .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+                        .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+                        .setKeySize(MasterKey.DEFAULT_AES_GCM_MASTER_KEY_SIZE)
+                        .build()
+                    val masterKey = MasterKey.Builder(get())
+                        .setKeyGenParameterSpec(spec)
+                        .build()
 
-                EncryptedSharedPreferences.create(
-                    androidContext(),
-                    "edtsku_secret_shared_prefs",
-                    masterKey,
-                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-                )
-            } else {
-                SecurePreferences(androidContext(), BuildConfig.DB_PASS, "edtsku_secret_shared_prefs")
+                    EncryptedSharedPreferences.create(
+                        androidContext(),
+                        "edtsku_secret_shared_prefs",
+                        masterKey,
+                        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+                    )
+                } else {
+                    SecurePreferences(
+                        androidContext(),
+                        BuildConfig.DB_PASS,
+                        "edtsku_secret_shared_prefs"
+                    )
+                }
+            }
+            catch (e: Exception) {
+                PreferenceManager.getDefaultSharedPreferences(androidContext())
+            }
+            catch (e: NoClassDefFoundError) {
+                PreferenceManager.getDefaultSharedPreferences(androidContext())
             }
         }
     }
