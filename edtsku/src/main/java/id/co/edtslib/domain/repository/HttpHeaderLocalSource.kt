@@ -5,7 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import id.co.edtslib.data.source.local.LocalDataSource
 
-class HttpHeaderLocalSource(private val sharedPreferences: SharedPreferences):
+class HttpHeaderLocalSource(sharedPreferences: SharedPreferences):
     LocalDataSource<MutableMap<String, String?>>(sharedPreferences) {
     private var headers: MutableMap<String, String?>? = null
 
