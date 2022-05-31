@@ -99,7 +99,7 @@ abstract class BaseDataSource {
                 e is MalformedJsonException) {
                 Result.error("ConnectionError", ErrorMessage().connection())
             } else {
-                Result.error("SystemError", ErrorMessage().system(e.message))
+                Result.error("999", ErrorMessage().system(e.message))
             }
         }
     }
