@@ -1,5 +1,6 @@
 package id.co.edtslib.di
 
+import android.app.Application
 import android.os.Build
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
@@ -23,7 +24,7 @@ val networkingModule = module {
     single { provideGson() }
     single { provideGsonConverterFactory(get()) }
 
-    single(named("api")) { provideRetrofit(get(), get(), get()) }
+    single(named("api")) { provideRetrofit(get(), get(), get(), get()) }
 }
 
 val sharedPreferencesModule = module {
@@ -80,13 +81,16 @@ private fun provideGsonConverterFactory(gson: Gson): GsonConverterFactory =
     GsonConverterFactory.create(gson)
 
 private fun provideRetrofit(
+    app: Application,
     okHttpClient: OkHttpClient,
     converterFactory: GsonConverterFactory,
     httpHeaderLocalSource: HttpHeaderLocalSource
 ): Retrofit {
+    val apps = Gson().toJson(TrackerApps.create(app.applicationContext))
     return Retrofit.Builder()
         .baseUrl(EdtsKu.baseUrlApi)
-        .client(okHttpClient.newBuilder().addInterceptor(AuthInterceptor(httpHeaderLocalSource)).build())
+        .client(okHttpClient.newBuilder().addInterceptor(
+            AuthInterceptor(httpHeaderLocalSource, apps)).build())
         .addConverterFactory(converterFactory)
         .build()
 }

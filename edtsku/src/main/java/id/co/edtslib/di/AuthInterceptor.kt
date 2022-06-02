@@ -8,7 +8,8 @@ import java.io.IOException
 /**
  * A {@see RequestInterceptor} that adds an auth token to requests
  */
-class AuthInterceptor(private val httpHeaderLocalSource: HttpHeaderLocalSource) : Interceptor {
+class AuthInterceptor(private val httpHeaderLocalSource: HttpHeaderLocalSource,
+                      private val apps: String) : Interceptor {
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -21,6 +22,8 @@ class AuthInterceptor(private val httpHeaderLocalSource: HttpHeaderLocalSource) 
                 }
             }
         }
+        builder.addHeader("apps", apps)
+
         return chain.proceed(builder.build())
     }
 }
