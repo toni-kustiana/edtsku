@@ -25,6 +25,7 @@ val networkingModule = module {
     single { provideGsonConverterFactory(get()) }
 
     single(named("api")) { provideRetrofit(get(), get(), get(), get()) }
+    single(named("mainApi")) { provideRetrofit(get(), get(), get(), get()) }
 }
 
 val sharedPreferencesModule = module {

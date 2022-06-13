@@ -1,17 +1,13 @@
 package id.co.edts.edtsku.example
 
-import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
-import androidx.lifecycle.lifecycleScope
-import id.co.edts.edtsku.example.data.LoginResponse
 import id.co.edts.edtsku.example.databinding.ActivityMainBinding
-import id.co.edtslib.data.source.remote.response.ProcessResult
-import id.co.edtslib.data.source.remote.response.ProcessResultDelegate
 import id.co.edtslib.uibase.BaseActivity
-import id.co.edtslib.uibase.ConfirmationHorizDialog
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.io.File
+
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
     private val configurationViewModel: ConfigurationViewModel by viewModel()
@@ -20,33 +16,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         get() = ActivityMainBinding::inflate
 
     override fun setup() {
-       configurationViewModel.login().observe(this) {
-           ProcessResult(it, object : ProcessResultDelegate<LoginResponse?> {
-               override fun loading() {
-               }
-
-               override fun error(code: String?, message: String?) {
-                   binding.textview.text = code
-               }
-
-               override fun unAuthorize(message: String?) {
-                   binding.textview.text = message
-               }
-
-               @SuppressLint("SetTextI18n")
-               override fun success(data: LoginResponse?) {
-                   binding.textview.text = "sukses $data"
-               }
-
-               @SuppressLint("SetTextI18n")
-               override fun errorConnection() {
-                   binding.textview.text = "errorConnection"
-               }
-
-               override fun errorSystem() {
-                   binding.textview.text = it.message
-               }
-           })
+       configurationViewModel.download("https://qlarp-api-dev.arsenadevelopment.eu/test.pdf").observe(this) {
+           if (it != null) {
+               val file = File(it)
+               val intent = Intent(Intent.ACTION_VIEW)
+               intent.setDataAndType(Uri.fromFile(file), "application/pdf")
+               intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+               startActivity(intent)
+           }
        }
     }
 
