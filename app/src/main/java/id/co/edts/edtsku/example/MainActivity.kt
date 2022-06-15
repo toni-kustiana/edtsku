@@ -1,8 +1,8 @@
 package id.co.edts.edtsku.example
 
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
+import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
 import id.co.edts.edtsku.example.databinding.ActivityMainBinding
 import id.co.edtslib.uibase.BaseActivity
@@ -18,18 +18,22 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun setup() {
        configurationViewModel.download("https://qlarp-api-dev.arsenadevelopment.eu/test.pdf").observe(this) {
-           if (it != null) {
-               val file = File(it)
+           if (it?.file != null) {
+               val file = File(it.file!!)
                val uri = FileProvider.getUriForFile(
                    this,
                    "${packageName}.provider",
                    file
                )
 
-               val intent = Intent(Intent.ACTION_VIEW)
-               intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-               intent.setDataAndType(uri, "application/pdf")
-               startActivity(intent)
+               val extension = MimeTypeMap.getFileExtensionFromUrl(it.file)
+               if (extension != null) {
+
+                   val intent = Intent(Intent.ACTION_VIEW)
+                   intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                   intent.setDataAndType(uri, it.type)
+                   startActivity(intent)
+               }
            }
        }
     }
