@@ -1,6 +1,7 @@
 package id.co.edts.edtsku.example
 
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import androidx.core.content.FileProvider
 import id.co.edts.edtsku.example.databinding.ActivityMainBinding
@@ -26,8 +27,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                )
 
                val intent = Intent(Intent.ACTION_VIEW)
-               intent.data = uri
-               intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+               intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+               intent.setDataAndType(uri, "application/pdf")
                startActivity(intent)
            }
        }

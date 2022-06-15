@@ -1,13 +1,10 @@
 package id.co.edtslib.domain.repository
 
 import android.content.Context
-import android.os.Environment
-import android.webkit.URLUtil
 import kotlinx.coroutines.flow.flow
 import okhttp3.ResponseBody
 import java.io.File
 import java.io.FileOutputStream
-import java.io.IOException
 import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.*
@@ -38,7 +35,7 @@ class MainRepository(
             input = body.byteStream()
             val fos = FileOutputStream(path)
             fos.use { output ->
-                val buffer = ByteArray(4 * 1024) // or other buffer size
+                val buffer = ByteArray(2*1024) // or other buffer size
                 var read: Int
                 while (input.read(buffer).also { read = it } != -1) {
                     output.write(buffer, 0, read)
@@ -62,7 +59,7 @@ class MainRepository(
             val extension = if (dotIndex < 0) "" else url.substring(dotIndex)
 
             val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-            val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
+            val storageDir: File? = context.cacheDir
             if (storageDir?.exists() != true) {
                 storageDir?.mkdir()
             }
