@@ -12,7 +12,7 @@ import id.co.edtslib.R
 
 class ConfirmationHorizDialog private constructor(context: Context) : ConfirmationDialog(context) {
     companion object {
-        private var dialog: ConfirmationHorizDialog? = null
+        var dialog: ConfirmationHorizDialog? = null
         fun show(activity: FragmentActivity, imageResId: Int, title: String,
                           subTitle: String, positiveButtonText: String, negativeButtonText: String,
                           positiveButtonListener: View.OnClickListener,

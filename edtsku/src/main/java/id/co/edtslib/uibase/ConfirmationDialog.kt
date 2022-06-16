@@ -26,7 +26,7 @@ open class ConfirmationDialog protected constructor(context: Context) : Dialog(c
     private var reverse = false
 
     companion object {
-        private var dialog: ConfirmationDialog? = null
+        var dialog: ConfirmationDialog? = null
         fun showOneButton(activity: FragmentActivity, imageResId: Int, title: String,
                  subTitle: String, buttonText: String,
                  onClickListener: View.OnClickListener) = showTwoButton(activity, imageResId,
