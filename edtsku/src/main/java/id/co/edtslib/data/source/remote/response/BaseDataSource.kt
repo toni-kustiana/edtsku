@@ -32,11 +32,11 @@ abstract class BaseDataSource {
                             if (body.isSuccess()) {
                                 Result.success(body)
                             } else {
-                                Result.error(body.status, body.message)
+                                Result.error(body.status, body.message, body.data?.content as T?)
                             }
                         }
                         else {
-                            Result.error(body.status, body.message)
+                            Result.error(body.status, body.message, body.data as T?)
                         }
                     } else {
                         Result.success(body)
