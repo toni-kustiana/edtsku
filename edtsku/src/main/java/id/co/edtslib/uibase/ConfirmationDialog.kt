@@ -24,19 +24,20 @@ open class ConfirmationDialog protected constructor(context: Context) : Dialog(c
     private var positiveButtonListener: View.OnClickListener? = null
     private var negativeButtonListener: View.OnClickListener? = null
     private var reverse = false
+    private var align = Gravity.LEFT
 
     companion object {
         var dialog: ConfirmationDialog? = null
         fun showOneButton(activity: FragmentActivity, imageResId: Int, title: String,
                  subTitle: String, buttonText: String,
-                 onClickListener: View.OnClickListener) = showTwoButton(activity, imageResId,
+                 onClickListener: View.OnClickListener, align: Int = Gravity.LEFT) = showTwoButton(activity, imageResId,
             title, subTitle, buttonText, "", onClickListener,
-            null)
+            null, align)
 
         fun showTwoButton(activity: FragmentActivity, imageResId: Int, title: String,
                           subTitle: String, positiveButtonText: String, negativeButtonText: String,
                           positiveButtonListener: View.OnClickListener,
-                          negativeButtonListener: View.OnClickListener?) {
+                          negativeButtonListener: View.OnClickListener?, align: Int = Gravity.LEFT) {
 
             if (dialog != null) {
                 close()
@@ -47,7 +48,7 @@ open class ConfirmationDialog protected constructor(context: Context) : Dialog(c
             dialog?.show(
                 imageResId, title, subTitle,
                 positiveButtonText, negativeButtonText,
-                positiveButtonListener, negativeButtonListener, false
+                positiveButtonListener, negativeButtonListener, false, align
             )
 
             val width = Resources.getSystem().displayMetrics.widthPixels * 0.9f
@@ -116,8 +117,8 @@ open class ConfirmationDialog protected constructor(context: Context) : Dialog(c
         else {
             imageView.isVisible = false
 
-            tvTitle.gravity = Gravity.LEFT
-            tvSubTitle.gravity = Gravity.LEFT
+            tvTitle.gravity = align
+            tvSubTitle.gravity = align
         }
 
         val tvPositiveButton = findViewById<TextView>(R.id.tvPositiveButton)
@@ -136,7 +137,7 @@ open class ConfirmationDialog protected constructor(context: Context) : Dialog(c
 
     fun show(imageResId: Int, title: String, subTitle: String, positiveButtonText: String,
              negativeButtonText: String, positiveButtonListener: View.OnClickListener,
-             negativeButtonListener: View.OnClickListener?, reverse: Boolean) {
+             negativeButtonListener: View.OnClickListener?, reverse: Boolean, align: Int = Gravity.LEFT) {
         this.imageResId = imageResId
         this.title = title
         this.subTitle = subTitle
@@ -145,6 +146,7 @@ open class ConfirmationDialog protected constructor(context: Context) : Dialog(c
         this.positiveButtonListener = positiveButtonListener
         this.negativeButtonListener = negativeButtonListener
         this.reverse = reverse
+        this.align = align
 
         super.show()
     }
