@@ -28,11 +28,26 @@ open class ConfirmationDialog protected constructor(context: Context) : Dialog(c
 
     companion object {
         var dialog: ConfirmationDialog? = null
+
+        fun showOneButton(activity: FragmentActivity, imageResId: Int, title: String,
+                          subTitle: String, buttonText: String,
+                          onClickListener: View.OnClickListener) = showTwoButton(activity, imageResId,
+            title, subTitle, buttonText, "", onClickListener,
+            null, Gravity.LEFT)
+
         fun showOneButton(activity: FragmentActivity, imageResId: Int, title: String,
                  subTitle: String, buttonText: String,
                  onClickListener: View.OnClickListener, align: Int = Gravity.LEFT) = showTwoButton(activity, imageResId,
             title, subTitle, buttonText, "", onClickListener,
             null, align)
+
+        fun showTwoButton(activity: FragmentActivity, imageResId: Int, title: String,
+                          subTitle: String, positiveButtonText: String, negativeButtonText: String,
+                          positiveButtonListener: View.OnClickListener,
+                          negativeButtonListener: View.OnClickListener?) {
+            showTwoButton(activity, imageResId, title, subTitle, positiveButtonText,
+                negativeButtonText, positiveButtonListener, negativeButtonListener, Gravity.LEFT)
+        }
 
         fun showTwoButton(activity: FragmentActivity, imageResId: Int, title: String,
                           subTitle: String, positiveButtonText: String, negativeButtonText: String,
