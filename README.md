@@ -89,14 +89,14 @@ class AccountRepository(private val remoteDataSource: AccountRemoteDataSource,
 
 ```kotlin
     EdtsKu.sslPinner = CommonUtil.hexToAscii(BuildConfig.SSL_PINNER)
-    EdtsKu.sslDomain = CommonUtil.hexToAscii(BuildConfig.SSL_DOMAIN)
+EdtsKu.sslDomain = CommonUtil.hexToAscii(BuildConfig.SSL_DOMAIN)
 ```
 
 ### Header Apps Information
 - Edstku send apps header to each api on json format. You must give edtsku version name and tablet information
 ```kotlin
     EdtsKu.versionName = "1.0.0"
-    EdtsKu.isTablet = false
+EdtsKu.isTablet = false
 ```
 
 ### Base Activity
@@ -125,117 +125,81 @@ For enable toast quit please override isHomeActivity on your home activity, and 
 override fun isHomeActivity() = true
 ```
 
-#### Button Style
-- solid and border color will adjust with your primary color
-- for positivenegativebutton style,  isslected=false -> negative button, isselected=true -> positive button
 
-![Button Style](https://i.ibb.co/8761X04/Screen-Shot-2021-09-12-at-11-48-20.png)
-
-#### Confirmation Dialog
-
-![Confirmation Dialog](https://i.ibb.co/cLMQPcP/confirmationdialog.jpg)
-
-Using this class to show dialog confrmation. 2 kind dialog: show one button action and two button action
-
-```kotlin
-/*
-imageResId: image resource id, set 0 for hide it
-onClickListener: action when user click the button
-*/
-fun showOneButton(activity: FragmentActivity, imageResId: Int, title: String,
-                  subTitle: String, buttonText: String,
-                  onClickListener: View.OnClickListener)
-
-/*
-imageResId: image resource id, set 0 for hide it
-positiveButtonListener: action when user click the up button
-negativeButtonListener: action when user click the bottom button
-*/
-fun showTwoButton(activity: FragmentActivity, imageResId: Int, title: String,
-                  subTitle: String, positiveButtonText: String, negativeButtonText: String,
-                  positiveButtonListener: View.OnClickListener,
-                  negativeButtonListener: View.OnClickListener?)
-
-```
-
-For close button, you can call
-```kotlin
-    ConfirmationDialog.close()
-```
 #### Utilitas
 ##### AndroidUtil
 ```kotlin
     // check is webview installed on
-    // success: callback function when webview already installed
-    fun checkWebAvailable(activity: FragmentActivity, success: () -> Unit)
-    
-    // copy source to clipboard
-    // onSuccess: callback function when copied
-    fun copyToClipboard(context: Context, label: String, source: String, onSuccess: () -> Unit)
-    
-    // force close soft keyboard
-    fun hideKeyboard(activity: FragmentActivity) 
-    
-    // read contents from asset file
-    // jsonFileName: json filename under assets folder
-    fun loadJSONFromAsset(context: Context, jsonFileName: String): String?
-    
-    // force show soft keyboard
-    fun showKeyboard(activity: FragmentActivity, editText: EditText?)
+// success: callback function when webview already installed
+fun checkWebAvailable(activity: FragmentActivity, success: () -> Unit)
+
+// copy source to clipboard
+// onSuccess: callback function when copied
+fun copyToClipboard(context: Context, label: String, source: String, onSuccess: () -> Unit)
+
+// force close soft keyboard
+fun hideKeyboard(activity: FragmentActivity)
+
+// read contents from asset file
+// jsonFileName: json filename under assets folder
+fun loadJSONFromAsset(context: Context, jsonFileName: String): String?
+
+// force show soft keyboard
+fun showKeyboard(activity: FragmentActivity, editText: EditText?)
 ```
 ##### DateTimeUtil
 ```kotlin
     // convert date to format like 2021-10-06T15:16:00.000Z 
-    fun getUTCString(date: Date): String
+fun getUTCString(date: Date): String
 ```
 
 ##### IntentUtil
 ```kotlin
     // open call intent
-    fun call(activity: FragmentActivity, phone: String)
-    
-    // open android application setting intent
-    fun openApplicationSetting(activity: FragmentActivity)
-    
-    // open map navigation intent from lat,lng to current position
-    fun openMapNavigation(activity: FragmentActivity, lat: Double, lng: Double)
+fun call(activity: FragmentActivity, phone: String)
+
+// open android application setting intent
+fun openApplicationSetting(activity: FragmentActivity)
+
+// open map navigation intent from lat,lng to current position
+fun openMapNavigation(activity: FragmentActivity, lat: Double, lng: Double)
 ```
 #### Utilitas
 ##### AndroidUtil
 ```kotlin
     // check is webview installed on
-    // success: callback function when webview already installed
-    fun checkWebAvailable(activity: FragmentActivity, success: () -> Unit)
-    
-    // copy source to clipboard
-    // onSuccess: callback function when copied
-    fun copyToClipboard(context: Context, label: String, source: String, onSuccess: () -> Unit)
-    
-    // force close soft keyboard
-    fun hideKeyboard(activity: FragmentActivity) 
-    
-    // read contents from asset file
-    // jsonFileName: json filename under assets folder
-    fun loadJSONFromAsset(context: Context, jsonFileName: String): String?
-    
-    // force show soft keyboard
-    fun showKeyboard(activity: FragmentActivity, editText: EditText?)
+// success: callback function when webview already installed
+fun checkWebAvailable(activity: FragmentActivity, success: () -> Unit)
+
+// copy source to clipboard
+// onSuccess: callback function when copied
+fun copyToClipboard(context: Context, label: String, source: String, onSuccess: () -> Unit)
+
+// force close soft keyboard
+fun hideKeyboard(activity: FragmentActivity)
+
+// read contents from asset file
+// jsonFileName: json filename under assets folder
+fun loadJSONFromAsset(context: Context, jsonFileName: String): String?
+
+// force show soft keyboard
+fun showKeyboard(activity: FragmentActivity, editText: EditText?)
 ```
 ##### DateTimeUtil
 ```kotlin
     // convert date to date format like 22 Oktober 2020
-    fun getDateFmt(date: Date, context: Context): String
+fun getDateFmt(date: Date, context: Context): String
 
-    // convert date to time format like 00:00 WIB
-    fun getTimeFmt(date: Date, context: Context): String
-    
-    // convert date format like 2021-10-06T15:16:00.000Z to date
-    fun getUTCDate(date: String): Date?
+// convert date to time format like 00:00 WIB
+fun getTimeFmt(date: Date, context: Context): String
 
-    // convert date to format like 2021-10-06T15:16:00.000Z 
-    fun getUTCString(date: Date): String
-    
-    
+// convert date format like 2021-10-06T15:16:00.000Z to date
+fun getUTCDate(date: String): Date?
+
+// convert date to format like 2021-10-06T15:16:00.000Z 
+fun getUTCString(date: Date): String
+
+
 ```
 
 ##### IntentUtil
