@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
@@ -13,46 +12,5 @@
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-    <TextView
-        android:id="@+id/textview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="NegativeButton"
-        style="@style/NegativeButton" />
-
-    <TextView
-        android:layout_marginTop="@dimen/dimen_8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="PositiveButton"
-        style="@style/PositiveButton" />
-
-    <TextView
-        android:layout_marginTop="@dimen/dimen_8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="PositiveNegativeButton"
-        style="@style/PositiveNegativeButton" />
-
-    <TextView
-        android:layout_marginTop="@dimen/dimen_8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="DisabledButton"
-        style="@style/DisabledButton" />
-
-    <TextView
-        android:layout_marginTop="@dimen/dimen_8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="PositiveSmallButton"
-        style="@style/PositiveSmallButton" />
-
-    <TextView
-        android:layout_marginTop="@dimen/dimen_8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="NegativeSmallButton"
-        style="@style/NegativeSmallButton" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>
