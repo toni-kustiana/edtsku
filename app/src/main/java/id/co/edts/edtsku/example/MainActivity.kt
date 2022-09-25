@@ -39,5 +39,5 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     override fun getTrackerPageName() = 0
-
+    override fun canBack() = true
 }

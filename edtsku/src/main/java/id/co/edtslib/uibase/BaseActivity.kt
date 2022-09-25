@@ -5,6 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -46,53 +47,47 @@ abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
             Tracker.trackPage(getString(getTrackerPageName()))
         }
 
-        //baseViewModel.trackFlush()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        //_binding = null
-    }
-
-    override fun onBackPressed() {
-        if (canBack()) {
-            if (isHomeActivity()) {
-                if (quitRunnable != null) {
-                    handler?.removeCallbacks(quitRunnable!!)
-                }
-
-                if (quit) {
-                    toastQuit?.cancel()
-                    finishAffinity()
-                } else {
-                    quit = true
-
-                    quitRunnable = Runnable {
-                        toastQuit?.cancel()
-                        quit = false
-                    }
-
-                    toastQuit = Toast.makeText(
-                        this,
-                        R.string.tap_for_quit,
-                        Toast.LENGTH_LONG
-                    )
-                    toastQuit?.show()
-
-                    handler = Handler(Looper.myLooper()!!)
+        onBackPressedDispatcher.addCallback {
+            if (canBack()) {
+                if (isHomeActivity()) {
                     if (quitRunnable != null) {
-                        handler?.postDelayed(quitRunnable!!, 3500)
+                        handler?.removeCallbacks(quitRunnable!!)
+                    }
+
+                    if (quit) {
+                        toastQuit?.cancel()
+                        finishAffinity()
+                    } else {
+                        quit = true
+
+                        quitRunnable = Runnable {
+                            toastQuit?.cancel()
+                            quit = false
+                        }
+
+                        toastQuit = Toast.makeText(
+                            this@BaseActivity,
+                            R.string.tap_for_quit,
+                            Toast.LENGTH_LONG
+                        )
+                        toastQuit?.show()
+
+                        handler = Handler(Looper.myLooper()!!)
+                        if (quitRunnable != null) {
+                            handler?.postDelayed(quitRunnable!!, 3500)
+                        }
                     }
                 }
-            }
-            else {
-                try {
-                    super.onBackPressed()
-                } catch (e: IllegalArgumentException) {
-                    // nothing to do
+                else {
+                    try {
+                        finish()
+                    } catch (e: IllegalArgumentException) {
+                        // nothing to do
+                    }
                 }
             }
         }
+        //baseViewModel.trackFlush()
     }
 
     private fun remoteConfigSetup() {
