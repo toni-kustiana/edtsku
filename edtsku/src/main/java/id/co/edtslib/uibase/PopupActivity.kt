@@ -7,7 +7,7 @@ import androidx.viewbinding.ViewBinding
 import id.co.edtslib.R
 
 abstract class PopupActivity<viewBinding: ViewBinding>: BaseActivity<viewBinding>() {
-    override fun canBack() = false
+    override fun canBack() = true
 
     abstract fun setupPopup()
     override fun setup() {
