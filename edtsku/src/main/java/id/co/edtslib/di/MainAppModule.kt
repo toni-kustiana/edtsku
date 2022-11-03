@@ -1,6 +1,6 @@
 package id.co.edtslib.di
 
-import id.co.edtslib.data.source.MainApiService
+import id.co.edtslib.data.source.remote.network.MainApiService
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit

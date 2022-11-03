@@ -1,10 +1,10 @@
-package id.co.edtslib.data.source.remote.response
+package id.co.edtslib.data
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.MalformedJsonException
-import id.co.edtslib.domain.model.ApiContentResponse
-import id.co.edtslib.domain.model.ApiResponse
+import id.co.edtslib.data.source.remote.response.ApiContentResponse
+import id.co.edtslib.data.source.remote.response.ApiResponse
 import id.co.edtslib.util.ErrorMessage
 import okio.BufferedSource
 import retrofit2.Response

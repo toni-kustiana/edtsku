@@ -1,6 +1,7 @@
-package id.co.edtslib.di
+package id.co.edtslib.data.source.remote.network
 
 import com.facebook.stetho.okhttp3.StethoInterceptor
+import id.co.edtslib.EdtsKu
 import okhttp3.CertificatePinner
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

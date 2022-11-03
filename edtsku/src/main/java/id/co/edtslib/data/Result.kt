@@ -1,4 +1,4 @@
-package id.co.edtslib.data.source.remote.response
+package id.co.edtslib.data
 
 data class Result<out T>(val status: Status, val data: T?, val code: String?,
                          val message: String?) {

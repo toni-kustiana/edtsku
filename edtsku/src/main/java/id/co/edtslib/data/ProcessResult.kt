@@ -1,4 +1,4 @@
-package id.co.edtslib.data.source.remote.response
+package id.co.edtslib.data
 
 open class ProcessResult<T>(result: Result<T>, delegate: ProcessResultDelegate<T>?) {
     init {

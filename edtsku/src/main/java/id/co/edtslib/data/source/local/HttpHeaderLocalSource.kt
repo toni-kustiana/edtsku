@@ -1,9 +1,8 @@
-package id.co.edtslib.domain.repository
+package id.co.edtslib.data.source.local
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import id.co.edtslib.data.source.local.LocalDataSource
 
 class HttpHeaderLocalSource(sharedPreferences: SharedPreferences):
     LocalDataSource<MutableMap<String, String?>>(sharedPreferences) {

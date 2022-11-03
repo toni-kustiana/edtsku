@@ -10,7 +10,11 @@ import androidx.security.crypto.MasterKey
 import com.google.gson.Gson
 import com.securepreferences.SecurePreferences
 import id.co.edtslib.BuildConfig
-import id.co.edtslib.domain.repository.HttpHeaderLocalSource
+import id.co.edtslib.EdtsKu
+import id.co.edtslib.data.source.remote.network.AuthInterceptor
+import id.co.edtslib.data.source.remote.network.SafeOkHttpClient
+import id.co.edtslib.data.source.remote.network.UnsafeOkHttpClient
+import id.co.edtslib.data.source.local.HttpHeaderLocalSource
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
@@ -26,6 +30,7 @@ val networkingModule = module {
 
     single(named("api")) { provideRetrofit(get(), get(), get(), get()) }
     single(named("mainApi")) { provideRetrofit(get(), get(), get(), get()) }
+    single(named("authApi")) { provideRetrofit(get(), get(), get(), get()) }
 }
 
 val sharedPreferencesModule = module {
@@ -61,20 +66,20 @@ val sharedPreferencesModule = module {
                         "edtsku_secret_shared_prefs"
                     )
                 }
-            }
-            catch (e: Exception) {
+            } catch (e: Exception) {
                 PreferenceManager.getDefaultSharedPreferences(androidContext())
-            }
-            catch (e: NoClassDefFoundError) {
+            } catch (e: NoClassDefFoundError) {
                 PreferenceManager.getDefaultSharedPreferences(androidContext())
             }
         }
     }
 }
 
-private fun provideOkHttpClient(): OkHttpClient = if ((EdtsKu.sslDomain.isNotEmpty() && EdtsKu.sslPinner.isNotEmpty())
-            || EdtsKu.trustManagerFactory != null)
-    SafeOkHttpClient().get() else UnsafeOkHttpClient().get()
+private fun provideOkHttpClient(): OkHttpClient =
+    if ((EdtsKu.sslDomain.isNotEmpty() && EdtsKu.sslPinner.isNotEmpty())
+        || EdtsKu.trustManagerFactory != null
+    )
+        SafeOkHttpClient().get() else UnsafeOkHttpClient().get()
 
 private fun provideGson(): Gson = Gson()
 
@@ -90,8 +95,12 @@ private fun provideRetrofit(
     val apps = Gson().toJson(TrackerApps.create(app.applicationContext))
     return Retrofit.Builder()
         .baseUrl(EdtsKu.baseUrlApi)
-        .client(okHttpClient.newBuilder().addInterceptor(
-            AuthInterceptor(httpHeaderLocalSource, apps)).build())
+        .client(
+            okHttpClient.newBuilder().addInterceptor(
+                AuthInterceptor(httpHeaderLocalSource, apps)
+            ).build()
+        )
         .addConverterFactory(converterFactory)
         .build()
+
 }

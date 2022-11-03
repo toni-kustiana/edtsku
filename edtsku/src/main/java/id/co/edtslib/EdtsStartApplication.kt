@@ -1,6 +1,7 @@
-package id.co.edtslib.di
+package id.co.edtslib
 
 import android.app.Application
+import id.co.edtslib.di.*
 import id.co.edtslib.tracker.Tracker
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.KoinApplication
@@ -13,13 +14,15 @@ class EdtsKu {
         var sslDomain = ""
         var sslPinner = ""
         var baseUrlApi = ""
+        var refreshTokenUrlApi = ""
         var debugging = false
         var trustManagerFactory: TrustManagerFactory? = null
         var versionName = ""
         var isTablet = false
 
-        fun init(application: Application, baseUrlApi: String, modules: List<Module>) {
+        fun init(application: Application, baseUrlApi: String, refreshTokenPath: String, modules: List<Module>) {
             EdtsKu.baseUrlApi = baseUrlApi
+            refreshTokenUrlApi = refreshTokenPath
 
             with(application) {
                 startKoin {
@@ -31,7 +34,9 @@ class EdtsKu {
                             mainViewModel,
                             mainAppModule,
                             mainInteractorModule,
-                            mainRepositoryModule
+                            mainRepositoryModule,
+                            sessionRepositoryModule,
+                            sessionModule
                         )
                     )
                     modules(modules)
@@ -40,10 +45,11 @@ class EdtsKu {
         }
 
 
-        fun init(application: Application, baseUrlApi: String, trackerApi: String,
+        fun init(application: Application, baseUrlApi: String, trackerApi: String, refreshTokenPath: String,
                  trackerToken: String, modules: List<Module>) {
 
             EdtsKu.baseUrlApi = baseUrlApi
+            refreshTokenUrlApi = refreshTokenPath
 
             with(application) {
                 startKoin {
@@ -55,7 +61,9 @@ class EdtsKu {
                             mainViewModel,
                             mainAppModule,
                             mainInteractorModule,
-                            mainRepositoryModule
+                            mainRepositoryModule,
+                            sessionRepositoryModule,
+                            sessionModule
                         )
                     )
                     modules(modules)
@@ -65,10 +73,11 @@ class EdtsKu {
             }
         }
 
-        fun init(application: Application, baseUrlApi: String, modules: List<Module>,
+        fun init(application: Application, baseUrlApi: String, refreshTokenPath: String, modules: List<Module>,
                  initEx:  (koin: KoinApplication) -> Unit ) {
 
             EdtsKu.baseUrlApi = baseUrlApi
+            refreshTokenUrlApi = refreshTokenPath
 
             with(application) {
                 startKoin {
@@ -80,7 +89,9 @@ class EdtsKu {
                             mainViewModel,
                             mainAppModule,
                             mainInteractorModule,
-                            mainRepositoryModule
+                            mainRepositoryModule,
+                            sessionRepositoryModule,
+                            sessionModule
                         )
                     )
                     modules(modules)

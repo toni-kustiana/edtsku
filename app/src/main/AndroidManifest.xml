@@ -15,6 +15,7 @@
         android:theme="@style/Theme.EdtsKu">
         <activity
             android:name=".MainActivity"
+            android:theme="@style/Theme.EdtsKu"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

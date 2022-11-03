@@ -6,6 +6,7 @@ import android.content.res.Resources
 import android.os.Build
 import android.provider.Settings
 import com.google.gson.annotations.SerializedName
+import id.co.edtslib.EdtsKu
 import java.util.*
 
 data class TrackerApps (

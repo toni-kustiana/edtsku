@@ -1,4 +1,4 @@
-package id.co.edtslib.data.source
+package id.co.edtslib.data.source.remote.network
 
 import okhttp3.ResponseBody
 import retrofit2.Response

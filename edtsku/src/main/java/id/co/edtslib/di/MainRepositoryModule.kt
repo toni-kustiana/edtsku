@@ -1,9 +1,9 @@
 package id.co.edtslib.di
 
-import id.co.edtslib.domain.repository.MainRemoteDataSource
-import id.co.edtslib.domain.repository.HttpHeaderLocalSource
+import id.co.edtslib.data.source.remote.MainRemoteDataSource
+import id.co.edtslib.data.source.local.HttpHeaderLocalSource
 import id.co.edtslib.domain.repository.IMainRepository
-import id.co.edtslib.domain.repository.MainRepository
+import id.co.edtslib.data.source.MainRepository
 import org.koin.dsl.module
 
 val mainRepositoryModule = module {

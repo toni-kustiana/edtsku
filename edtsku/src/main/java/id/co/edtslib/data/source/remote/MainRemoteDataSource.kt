@@ -1,6 +1,6 @@
-package id.co.edtslib.domain.repository
+package id.co.edtslib.data.source.remote
 
-import id.co.edtslib.data.source.MainApiService
+import id.co.edtslib.data.source.remote.network.MainApiService
 
 class MainRemoteDataSource(private val apiService: MainApiService) {
 

@@ -1,7 +1,9 @@
-package id.co.edtslib.domain.repository
+package id.co.edtslib.data.source
 
 import android.content.Context
 import id.co.edtslib.domain.model.DownloadResult
+import id.co.edtslib.domain.repository.IMainRepository
+import id.co.edtslib.data.source.remote.MainRemoteDataSource
 import kotlinx.coroutines.flow.flow
 import okhttp3.ResponseBody
 import java.io.File

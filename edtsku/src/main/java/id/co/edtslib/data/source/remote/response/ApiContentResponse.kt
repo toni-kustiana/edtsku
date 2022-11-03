@@ -1,4 +1,4 @@
-package id.co.edtslib.domain.model
+package id.co.edtslib.data.source.remote.response
 
 import com.google.gson.annotations.SerializedName
 

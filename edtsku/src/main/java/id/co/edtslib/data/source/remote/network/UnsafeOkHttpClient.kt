@@ -1,7 +1,8 @@
-package id.co.edtslib.di
+package id.co.edtslib.data.source.remote.network
 
 import android.annotation.SuppressLint
 import com.facebook.stetho.okhttp3.StethoInterceptor
+import id.co.edtslib.EdtsKu
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.security.SecureRandom

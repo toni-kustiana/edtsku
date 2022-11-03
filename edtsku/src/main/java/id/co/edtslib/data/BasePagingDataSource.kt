@@ -1,8 +1,8 @@
-package id.co.edtslib.data.source.remote.response
+package id.co.edtslib.data
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import id.co.edtslib.domain.model.ApiPagingResponse
+import id.co.edtslib.data.source.remote.response.ApiPagingResponse
 import retrofit2.Response
 
 class BasePagingDataSource<T : Any>(private val call: suspend (page: Int) -> Response<ApiPagingResponse<T>>): PagingSource<Int, T>() {

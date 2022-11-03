@@ -1,6 +1,6 @@
-package id.co.edtslib.di
+package id.co.edtslib.data.source.remote.network
 
-import id.co.edtslib.domain.repository.HttpHeaderLocalSource
+import id.co.edtslib.data.source.local.HttpHeaderLocalSource
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException

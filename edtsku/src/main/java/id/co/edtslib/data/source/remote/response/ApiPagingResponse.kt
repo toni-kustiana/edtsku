@@ -1,10 +1,10 @@
-package id.co.edtslib.domain.model
+package id.co.edtslib.data.source.remote.response
 
 import com.google.gson.annotations.SerializedName
 
-data class ApiResponse<T>(
+data class ApiPagingResponse<T>(
     @SerializedName("data")
-    val data: T?,
+    val data: ContentResponse<List<T>?>?,
     @SerializedName("message")
     val message: String,
     @SerializedName("status")
@@ -12,5 +12,5 @@ data class ApiResponse<T>(
     @SerializedName("timestamp")
     val timeStamp: String
 ) {
-    fun isSuccess() = "00" == status || "01" == status
+    fun isSuccess() = ("00" == status || "01" == status) && data != null && data.content != null
 }

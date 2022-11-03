@@ -1,4 +1,4 @@
-package id.co.edtslib.data.source.remote.response
+package id.co.edtslib.data
 
 interface ProcessResultDelegate<T> {
     fun loading()
