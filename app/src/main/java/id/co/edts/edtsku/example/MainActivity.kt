@@ -12,7 +12,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun setup() {
         binding.tvClick.setOnClickListener {
-            WebActivity.open(this, "https://sg-edts.com/", "Edts")
+            WebActivity.open(this, "https://sg-edts1.com/", "Edts")
         }
     }
 

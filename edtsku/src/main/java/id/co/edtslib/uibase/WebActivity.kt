@@ -5,7 +5,6 @@ import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.webkit.*
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
@@ -34,8 +33,8 @@ open class WebActivity: PopupActivity<ActivityWebBinding>() {
 
     protected open fun errorView(): View? = null
     protected open fun showError(errorCode: Int?, errorDescription: String?) {
-        Toast.makeText(this, "$errorCode :: $errorDescription", Toast.LENGTH_SHORT).show()
         binding.flError.isVisible = true
+        binding.webView.isVisible = false
     }
 
     override val bindingInflater: (LayoutInflater) -> ActivityWebBinding
@@ -134,17 +133,18 @@ open class WebActivity: PopupActivity<ActivityWebBinding>() {
     }
 
     private fun loading() {
+        binding.webView.isVisible = true
         binding.flError.isVisible = false
         binding.flProgressBar.isVisible = true
         binding.swipeRefreshLayout.isEnabled = false
     }
 
-    private fun load(url: String) {
+    protected fun load(url: String) {
         loading()
         binding.webView.loadUrl(url)
     }
 
-    private fun reload() {
+    protected fun reload() {
         loading()
         binding.webView.reload()
     }
