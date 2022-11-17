@@ -6,9 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/imageView"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvClick"
+        android:text="klik"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
