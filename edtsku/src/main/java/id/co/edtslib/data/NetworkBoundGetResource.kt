@@ -15,18 +15,22 @@ abstract class NetworkBoundGetResource<ResultType, RequestType>(
             val response = createCall()
             when (response.status) {
                 Result.Status.SUCCESS -> {
-                    if (response.data != null) {
-                        saveCallResult(response.data)
+                    if (isValidData(response)) {
+                        response.data?.let { saveCallResult(it) }
                         emitAll(
                             getCached().map {
                                 Result.success(it)
                             }
                         )
                     } else {
-                        Result.error(
-                            response.code,
-                            response.message,
-                            getCached()
+                        emitAll(
+                            getCached().map {
+                                Result.error(
+                                    response.code,
+                                    response.message,
+                                    it
+                                )
+                            }
                         )
                     }
                 }
@@ -78,6 +82,8 @@ abstract class NetworkBoundGetResource<ResultType, RequestType>(
             )
         }
     }
+
+    open fun isValidData(response: Result<RequestType>) = response.data != null
 
     protected abstract fun getCached(): Flow<ResultType>
 
