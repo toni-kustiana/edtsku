@@ -15,8 +15,18 @@ abstract class NetworkBoundProcessResource<ResultType, RequestType>(
         val response = createCall()
         when (response.status) {
             Result.Status.SUCCESS -> {
-                val responseData = callBackResult(response.data!!)
-                emit(Result.success(responseData))
+                if (isValidData(response)) {
+                    val responseData = callBackResult(response.data!!)
+                    emit(Result.success(responseData))
+                } else {
+                    emit(
+                        Result.error(
+                            response.code,
+                            response.message,
+                            onResponseError(response.data)
+                        )
+                    )
+                }
             }
             Result.Status.UNAUTHORIZED -> {
                 val cachedHeaders = localDataSource.getCached()
@@ -54,6 +64,8 @@ abstract class NetworkBoundProcessResource<ResultType, RequestType>(
             }
         }
     }
+
+    open fun isValidData(response: Result<RequestType>) = response.data != null
 
     protected open suspend fun onResponseError(data: Any?): ResultType? {
         return null
