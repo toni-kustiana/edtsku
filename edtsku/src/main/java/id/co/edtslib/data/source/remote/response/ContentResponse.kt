@@ -10,7 +10,9 @@ data class ContentResponse<T>(
     @SerializedName("totalPages")
     val totalPages: Int,
     @SerializedName("additionalData")
-    val additionalData: Map<String, Any>?
+    val additionalData: Map<String, Any>?,
+    @SerializedName("totalElements")
+    val totalElements: Int
 ) {
     fun getPageNumber() = pageable?.pageNumber ?: 0
     private fun getPageSize(): Int = pageable?.pageSize ?: 0
