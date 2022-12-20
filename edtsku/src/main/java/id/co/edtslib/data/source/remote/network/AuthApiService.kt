@@ -12,7 +12,7 @@ interface AuthApiService {
 
     @POST("{path}")
     suspend fun refreshToken(
-        @Path("path") path: String,
+        @Path("path", encoded = true) path: String,
         @Body request: SessionRequest
     ): Response<ApiResponse<SessionResponse>>
 
