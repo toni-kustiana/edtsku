@@ -30,9 +30,11 @@ class HttpHeaderLocalSource(sharedPreferences: SharedPreferences):
         save(headers)
     }
 
-    fun setBearerToken(token: String) {
-        val accessToken = String.format("Bearer %s", token)
-        setHeader("Authorization", accessToken)
+    fun setBearerToken(token: String?) {
+        if (token != null) {
+            val accessToken = String.format("Bearer %s", token)
+            setHeader("Authorization", accessToken)
+        }
     }
 
     fun isLogged(): Boolean{

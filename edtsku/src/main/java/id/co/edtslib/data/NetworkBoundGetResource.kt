@@ -8,6 +8,13 @@ abstract class NetworkBoundGetResource<ResultType, RequestType>(
     private val localDataSource: HttpHeaderLocalSource,
     private val sessionRemoteDataSource: SessionRemoteDataSource
 ) {
+
+    protected fun shouldSave() = false
+    protected abstract fun getCached(): Flow<ResultType>
+    protected abstract fun shouldFetch(data: ResultType?): Boolean
+    protected abstract suspend fun createCall(): Result<RequestType>
+    protected abstract suspend fun saveCallResult(data: RequestType)
+
     private val result: Flow<Result<ResultType>> = flow {
         emit(Result.loading())
         val dbSource = getCached().first()
@@ -84,14 +91,5 @@ abstract class NetworkBoundGetResource<ResultType, RequestType>(
     }
 
     open fun isValidData(response: Result<RequestType>) = response.data != null
-
-    protected abstract fun getCached(): Flow<ResultType>
-
-    protected abstract fun shouldFetch(data: ResultType?): Boolean
-
-    protected abstract suspend fun createCall(): Result<RequestType>
-
-    protected abstract suspend fun saveCallResult(data: RequestType)
-
     fun asFlow(): Flow<Result<ResultType>> = result
 }
