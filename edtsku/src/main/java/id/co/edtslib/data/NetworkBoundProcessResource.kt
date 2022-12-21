@@ -31,6 +31,7 @@ abstract class NetworkBoundProcessResource<ResultType, RequestType>(
             Result.Status.UNAUTHORIZED -> {
                 val cachedHeaders = localDataSource.getCached()
                 val refreshToken = cachedHeaders?.get("refresh-token")
+                localDataSource.setBearerToken(refreshToken)
                 if (refreshToken != null) {
                     val tokenResponse = sessionRemoteDataSource.refreshToken(refreshToken)
                     when (tokenResponse.status) {
