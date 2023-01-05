@@ -9,6 +9,7 @@ import id.co.edtslib.util.ErrorMessage
 import okio.BufferedSource
 import retrofit2.Response
 import java.net.ConnectException
+import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.nio.charset.Charset
 
@@ -86,7 +87,12 @@ abstract class BaseDataSource {
                                 json,
                                 object : TypeToken<ApiResponse<Any>?>() {}.type
                             )
-                            return Result.error(badResponse.status, badResponse.message)
+                            return if (code == 500) {
+                                Result.error("SystemError", badResponse.message)
+
+                            } else {
+                                Result.error(badResponse.status, badResponse.message)
+                            }
                         }
                     }
                     else if (code == 503) {
@@ -96,7 +102,7 @@ abstract class BaseDataSource {
             return Result.error(code.toString(), response.message())
         } catch (e: Exception) {
             return if (e is ConnectException || e is UnknownHostException ||
-                e is MalformedJsonException) {
+                e is MalformedJsonException || e is SocketTimeoutException) {
                 Result.error("ConnectionError", ErrorMessage().connection())
             } else {
                 Result.error("999", ErrorMessage().system(e.message))
