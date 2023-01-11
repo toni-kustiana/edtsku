@@ -8,6 +8,5 @@ import kotlinx.coroutines.flow.Flow
 interface ConfigurationUseCase {
     fun login(): Flow<Result<LoginResponse?>>
     fun loginVisitor(): Flow<Result<Session?>>
-    fun getProvinces(): Flow<Result<List<Location>?>>
     fun refreshToken(): Flow<Result<Session?>>
 }

@@ -19,6 +19,7 @@ class EdtsKu {
         var trustManagerFactory: TrustManagerFactory? = null
         var versionName = ""
         var isTablet = false
+        var packageName = ""
 
         fun init(application: Application, baseUrlApi: String, refreshTokenPath: String, modules: List<Module>) {
             EdtsKu.baseUrlApi = baseUrlApi

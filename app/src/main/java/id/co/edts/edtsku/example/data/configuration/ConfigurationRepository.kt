@@ -1,16 +1,12 @@
 package id.co.edts.edtsku.example.data.configuration
 
-import id.co.edts.edtsku.example.DataMapper.provinceListMapResponseToDomain
 import id.co.edts.edtsku.example.DataMapper.sessionMapResponseToDomain
-import id.co.edts.edtsku.example.Location
 import id.co.edts.edtsku.example.Session
-import id.co.edts.edtsku.example.data.LocationResponse
 import id.co.edts.edtsku.example.data.LoginResponse
 import id.co.edtslib.data.NetworkBoundProcessResource
 import id.co.edtslib.data.Result
 import id.co.edtslib.data.source.local.HttpHeaderLocalSource
 import id.co.edtslib.data.source.remote.SessionRemoteDataSource
-import id.co.edtslib.data.source.remote.response.ApiContentResponse
 import id.co.edtslib.data.source.remote.response.ApiResponse
 import id.co.edtslib.data.source.remote.response.SessionResponse
 import kotlinx.coroutines.flow.Flow
@@ -34,7 +30,7 @@ class ConfigurationRepository(
                 }
             }
             Result.Status.UNAUTHORIZED -> {
-                emit(Result.unauthorized<LoginResponse?>(response.message))
+                emit(Result.unauthorized(response.message))
             }
             else -> {
                 emit(Result.error<LoginResponse?>(response.code, response.message, null))
@@ -62,18 +58,6 @@ class ConfigurationRepository(
 
         }.asFlow()
 
-    override fun getProvinces() =
-        object : NetworkBoundProcessResource<List<Location>?, ApiContentResponse<List<LocationResponse>>>(
-            localSource, sessionRemoteDataSource
-        ) {
-            override suspend fun createCall() =
-                remoteDataSource.getProvinces()
-
-            override suspend fun callBackResult(data: ApiContentResponse<List<LocationResponse>>): List<Location>? {
-                return provinceListMapResponseToDomain(data.data!!.content)
-            }
-
-        }.asFlow()
 
     override fun refreshToken() =
         object : NetworkBoundProcessResource<Session?, ApiResponse<SessionResponse>>(

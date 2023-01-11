@@ -17,6 +17,8 @@ class App : Application() {
 
         Timber.plant(Timber.DebugTree())
         EdtsKu.debugging = true
+        EdtsKu.packageName = "id.co.edts.edtsku.example"
+        EdtsKu.versionName = "1.0"
         //EdtsKu.trustManagerFactory = CertUtil.getTrustManager(cert)
         EdtsKu.sslPinner =
             CommonUtil.hexToAscii("7368613235362f71316e6673616d64614d666a44464b6e54367574315433614c73783250383851754257445a6a595a7048733d")

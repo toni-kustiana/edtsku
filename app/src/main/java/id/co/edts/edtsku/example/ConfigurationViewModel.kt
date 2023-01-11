@@ -11,6 +11,5 @@ class ConfigurationViewModel(
 ) : BaseViewModel() {
     fun download(url: String) = mainUseCase.download(url).asLiveData()
     fun loginVisitor() = configurationUseCase.loginVisitor().asLiveData()
-    fun getProvinces() = configurationUseCase.getProvinces().asLiveData()
     fun refreshToken() = configurationUseCase.refreshToken().asLiveData()
 }

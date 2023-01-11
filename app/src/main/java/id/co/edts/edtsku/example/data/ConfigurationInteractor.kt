@@ -7,6 +7,5 @@ class ConfigurationInteractor(
 ) : ConfigurationUseCase {
     override fun login() = repository.login()
     override fun loginVisitor() = repository.loginVisitor()
-    override fun getProvinces() = repository.getProvinces()
     override fun refreshToken() = repository.refreshToken()
 }

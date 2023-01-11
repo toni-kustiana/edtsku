@@ -1,5 +1,6 @@
 package id.co.edtslib.uibase
 
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -32,6 +33,8 @@ abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
     
     open fun canBack() = false
     open fun isHomeActivity() = false
+    open fun clonerAllowed() = true
+    open fun emulatorAllowed() = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +44,32 @@ abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
 
         remoteConfigSetup()
 
-        setup()
+        if (! clonerAllowed()) {
+            if (CheckCloner(this).check()) {
+                finish()
+            }
+            else
+                if (emulatorAllowed()) {
+                    setup()
+                }
+            else if (isEmulator()) {
+                finish()
+                }
+            else {
+                setup()
+                }
+        }
+        else {
+            if (emulatorAllowed()) {
+                setup()
+            }
+            else if (isEmulator()) {
+                finish()
+            }
+            else {
+                setup()
+            }
+        }
 
         if (getTrackerPageName() > 0) {
             Tracker.trackPage(getString(getTrackerPageName()))
@@ -105,5 +133,25 @@ abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
                 // nothing to do
             }
         }
+    }
+
+    private fun isEmulator(): Boolean {
+        return (Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic")
+                || Build.FINGERPRINT.startsWith("generic")
+                || Build.FINGERPRINT.startsWith("unknown")
+                || Build.HARDWARE.contains("goldfish")
+                || Build.HARDWARE.contains("ranchu")
+                || Build.MODEL.contains("google_sdk")
+                || Build.MODEL.contains("Emulator")
+                || Build.MODEL.contains("Android SDK built for x86")
+                || Build.MANUFACTURER.contains("Genymotion")
+                || Build.PRODUCT.contains("sdk_google")
+                || Build.PRODUCT.contains("google_sdk")
+                || Build.PRODUCT.contains("sdk")
+                || Build.PRODUCT.contains("sdk_x86")
+                || Build.PRODUCT.contains("sdk_gphone64_arm64")
+                || Build.PRODUCT.contains("vbox86p")
+                || Build.PRODUCT.contains("emulator")
+                || Build.PRODUCT.contains("simulator"))
     }
 }
