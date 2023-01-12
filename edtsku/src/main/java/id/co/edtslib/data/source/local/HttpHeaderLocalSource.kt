@@ -6,21 +6,13 @@ import com.google.gson.reflect.TypeToken
 
 class HttpHeaderLocalSource(sharedPreferences: SharedPreferences):
     LocalDataSource<MutableMap<String, String?>>(sharedPreferences) {
-    private var headers: MutableMap<String, String?>? = null
 
     override fun getKeyName(): String = "HttpHeader"
     override fun getValue(json: String): MutableMap<String, String?> =
         Gson().fromJson(json, object : TypeToken<MutableMap<String, String?>>() {}.type)
 
     fun setHeader(key: String, value: String?) {
-        if (headers == null) {
-            headers = getCached()
-        }
-
-        if (headers == null) {
-            headers = mutableMapOf()
-        }
-
+        val headers = getCached()
         if (value == null) {
             headers?.remove(key)
         }
@@ -38,18 +30,12 @@ class HttpHeaderLocalSource(sharedPreferences: SharedPreferences):
     }
 
     fun isLogged(): Boolean{
-        if (headers == null) {
-            headers = getCached()
-        }
-
+        val headers = getCached()
         return headers?.get("Authorization") != null
     }
 
     fun logout() {
-        if (headers == null) {
-            headers = getCached()
-        }
-
+        val headers = getCached()
         headers?.remove("Authorization")
         save(headers)
     }
