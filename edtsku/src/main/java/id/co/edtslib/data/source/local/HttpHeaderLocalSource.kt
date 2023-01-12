@@ -12,12 +12,15 @@ class HttpHeaderLocalSource(sharedPreferences: SharedPreferences):
         Gson().fromJson(json, object : TypeToken<MutableMap<String, String?>>() {}.type)
 
     fun setHeader(key: String, value: String?) {
-        val headers = getCached()
+        var headers = getCached()
+        if (headers == null) {
+            headers = mutableMapOf()
+        }
         if (value == null) {
-            headers?.remove(key)
+            headers.remove(key)
         }
         else {
-            headers?.put(key, value)
+            headers[key] = value
         }
         save(headers)
     }
