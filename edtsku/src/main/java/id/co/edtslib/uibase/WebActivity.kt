@@ -1,6 +1,7 @@
 package id.co.edtslib.uibase
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
@@ -36,6 +37,7 @@ open class WebActivity: PopupActivity<ActivityWebBinding>() {
         binding.flError.isVisible = true
         binding.webView.isVisible = false
     }
+    protected fun shouldOverrideUrlLoading(uri: Uri?) = false
 
     override val bindingInflater: (LayoutInflater) -> ActivityWebBinding
         get() = ActivityWebBinding::inflate
@@ -110,6 +112,13 @@ open class WebActivity: PopupActivity<ActivityWebBinding>() {
                 if (view?.url == failingUrl) {
                     showError(errorCode, description)
                 }
+            }
+
+            override fun shouldOverrideUrlLoading(
+                view: WebView?,
+                request: WebResourceRequest?
+            ): Boolean {
+                return shouldOverrideUrlLoading(request?.url)
             }
         }
     }

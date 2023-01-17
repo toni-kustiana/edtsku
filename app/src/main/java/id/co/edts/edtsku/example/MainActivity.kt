@@ -1,7 +1,6 @@
 package id.co.edts.edtsku.example
 
 import android.view.LayoutInflater
-import android.widget.Toast
 import id.co.edts.edtsku.example.databinding.ActivityMainBinding
 import id.co.edtslib.uibase.BaseActivity
 import id.co.edtslib.uibase.WebActivity
@@ -12,9 +11,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         get() = ActivityMainBinding::inflate
 
     override fun setup() {
-        binding.tvClick.setOnClickListener {
-            Toast.makeText(this, BuildConfig.APPLICATION_ID, Toast.LENGTH_SHORT).show()
-        }
+        WebActivity.open(this, "https://qlarp-api.arsenadevelopment.eu/abah1.html")
     }
 
     override fun clonerAllowed() = false
