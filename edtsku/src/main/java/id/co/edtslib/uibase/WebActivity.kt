@@ -37,7 +37,7 @@ open class WebActivity: PopupActivity<ActivityWebBinding>() {
         binding.flError.isVisible = true
         binding.webView.isVisible = false
     }
-    protected fun shouldOverrideUrlLoading(uri: Uri?) = false
+    protected open fun shouldOverrideUrlLoading(uri: Uri?) = false
 
     override val bindingInflater: (LayoutInflater) -> ActivityWebBinding
         get() = ActivityWebBinding::inflate
