@@ -46,7 +46,6 @@ open class WebActivity: PopupActivity<ActivityWebBinding>() {
 
     override fun setupPopup() {
         setupView()
-        setupListener()
         initData()
     }
 
@@ -59,25 +58,18 @@ open class WebActivity: PopupActivity<ActivityWebBinding>() {
 
         binding.flError.isVisible = false
         binding.flProgressBar.isVisible = false
-        binding.swipeRefreshLayout.isEnabled = true
 
         binding.webView.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
 
                 binding.flProgressBar.isVisible = false
-
-                binding.swipeRefreshLayout.isEnabled = true
-                binding.swipeRefreshLayout.isRefreshing = false
             }
 
             override fun onPageCommitVisible(view: WebView?, url: String?) {
                 super.onPageCommitVisible(view, url)
 
                 binding.flProgressBar.isVisible = false
-
-                binding.swipeRefreshLayout.isEnabled = true
-                binding.swipeRefreshLayout.isRefreshing = false
             }
 
             @RequiresApi(Build.VERSION_CODES.M)
@@ -123,12 +115,6 @@ open class WebActivity: PopupActivity<ActivityWebBinding>() {
         }
     }
 
-    private fun setupListener() {
-        binding.swipeRefreshLayout.setOnRefreshListener {
-            reload()
-        }
-    }
-
     private fun initData() {
         val title = intent?.getStringExtra("title")
         if (title != null) {
@@ -145,7 +131,6 @@ open class WebActivity: PopupActivity<ActivityWebBinding>() {
         binding.webView.isVisible = true
         binding.flError.isVisible = false
         binding.flProgressBar.isVisible = true
-        binding.swipeRefreshLayout.isEnabled = false
     }
 
     protected fun load(url: String) {

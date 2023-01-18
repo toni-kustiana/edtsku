@@ -29,19 +29,13 @@
                 android:layout_height="wrap_content" />
 
         </FrameLayout>
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipeRefreshLayout"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+        <id.co.edtslib.uibase.EdtsWebView
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/flProgressBar" >
-            <id.co.edtslib.uibase.EdtsWebView
-                android:id="@+id/webView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
+            app:layout_constraintTop_toBottomOf="@id/flProgressBar"
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     <FrameLayout
