@@ -6,14 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
+import id.co.edtslib.tracker.Tracker
+import java.util.*
 
 abstract class BaseFragment<viewBinding : ViewBinding>: Fragment() {
     //private val baseViewModel: BaseViewModel by viewModel()
+    private val now = Date().time
 
     private var _binding: ViewBinding? = null
     abstract val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> viewBinding
 
-    abstract fun getTrackerPageName(): Int
+    abstract fun getTrackerPageName(): String?
+    fun getTrackerPageId() = if (getTrackerPageName() == null) null else "${getTrackerPageName()}_${now}"
 
     open fun isInAdapter() = false
     open fun canBack() = true
@@ -25,25 +29,7 @@ abstract class BaseFragment<viewBinding : ViewBinding>: Fragment() {
         get() = _binding as viewBinding
 
     fun isNotNullBinding() = _binding != null
-/*
-    protected fun isViewModelInitialized() = ::viewModel.isInitialized
 
-    open fun show() {
-        if (isViewModelInitialized()) {
-            if (getScreenName() > 0 && context != null) {
-                viewModel.trackPage(getString(getScreenName()))
-            }
-
-            viewModel.trackFlush()
-        }
-    }
-
-    open fun hide() {
-        if (getScreenName() > 0) {
-            viewModel.trackUserImpressions(getString(getScreenName()))
-        }
-    }
-*/
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -56,16 +42,10 @@ abstract class BaseFragment<viewBinding : ViewBinding>: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setup()
-/*
-        if (getScreenName() > 0 && ! isInAdapter()) {
-            pageView = getString(getScreenName())
-            if (pageView != null) {
-                viewModel.trackPage(pageView!!)
-            }
-        }
 
-        viewModel.trackFlush()
- */
+        if (getTrackerPageName() != null) {
+            Tracker.trackPage(getTrackerPageName()!!, getTrackerPageId()!!)
+        }
     }
 
     abstract fun setup()
@@ -73,5 +53,13 @@ abstract class BaseFragment<viewBinding : ViewBinding>: Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         //_binding = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (getTrackerPageName() != null) {
+            Tracker.resumePage(getTrackerPageName()!!, getTrackerPageId()!!)
+        }
     }
 }
