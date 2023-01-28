@@ -42,7 +42,7 @@ open class WebActivity: PopupActivity<ActivityWebBinding>() {
     override val bindingInflater: (LayoutInflater) -> ActivityWebBinding
         get() = ActivityWebBinding::inflate
 
-    override fun getTrackerPageName() = 0
+    override fun getTrackerPageName(): String? = null
 
     override fun setupPopup() {
         setupView()

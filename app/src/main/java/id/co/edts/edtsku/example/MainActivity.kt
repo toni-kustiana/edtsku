@@ -17,6 +17,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     override fun clonerAllowed() = false
     override fun emulatorAllowed() = false
 
-    override fun getTrackerPageName() = 0
+    override fun getTrackerPageName(): String? = null
 
 }

@@ -26,10 +26,12 @@ class App : Application() {
             CommonUtil.hexToAscii("656c6576656e69612e636f2e6964")
 
         EdtsKu.init(
-            this,
-            "http://gurihmart-staging.sg-edts.co.id",
-            "/customer/api/mobile/user/refresh",
-            listOf(appModule, repositoryModule, viewModelModule)
+            application = this,
+            baseUrlApi = "http://gurihmart-staging.sg-edts.co.id",
+            trackerApi = "https://us-central1-idm-klik-dwh-apollo-dev.cloudfunctions.net/klikidm_apollo_apps_tracker_gateway/",
+            refreshTokenPath = "/customer/api/mobile/user/refresh",
+            trackerToken = "AIzaSyCOi2whcq-BY-93oJKmuj5cGLMm9PXyciQ",
+            modules = listOf(appModule, repositoryModule, viewModelModule)
         )
     }
 }

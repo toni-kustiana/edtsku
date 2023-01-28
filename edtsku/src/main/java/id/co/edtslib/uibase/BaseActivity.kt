@@ -14,21 +14,26 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import id.co.edtslib.R
 import id.co.edtslib.tracker.Tracker
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.Date
 
 abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
-    private val baseViewModel: BaseViewModel by viewModel()
+    private val configurationViewModel: BaseViewModel by viewModel()
     private var _binding: ViewBinding? = null
     private var toastQuit: Toast? = null
     private var quit: Boolean = false
     private var quitRunnable: Runnable? = null
     private var handler: Handler? = null
+    private val now = Date().time
 
     @Suppress("UNCHECKED_CAST")
     protected val binding: viewBinding
         get() = _binding as viewBinding
 
     abstract val bindingInflater: (LayoutInflater) -> viewBinding
-    abstract fun getTrackerPageName(): Int
+
+    abstract fun getTrackerPageName(): String?
+    fun getTrackerPageId() = if (getTrackerPageName() == null) null else "${getTrackerPageName()}_${now}"
+
     abstract fun setup()
     
     open fun canBack() = false
@@ -71,8 +76,8 @@ abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
             }
         }
 
-        if (getTrackerPageName() > 0) {
-            Tracker.trackPage(getString(getTrackerPageName()))
+        if (getTrackerPageName() != null) {
+            Tracker.trackPage(getTrackerPageName()!!, getTrackerPageId()!!)
         }
 
         onBackPressedDispatcher.addCallback {
