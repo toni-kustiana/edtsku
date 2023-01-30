@@ -25,6 +25,11 @@ abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
     private var handler: Handler? = null
     private val now = Date().time
 
+    companion object {
+        private var isMinimizing = false
+        private var isMinimized = false
+    }
+
     @Suppress("UNCHECKED_CAST")
     protected val binding: viewBinding
         get() = _binding as viewBinding
@@ -138,6 +143,27 @@ abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
                 // nothing to do
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (isMinimized) {
+            Tracker.trackResumeApplication()
+        }
+
+        isMinimized = false
+        isMinimizing = false
+    }
+
+    override fun onPause() {
+        super.onPause()
+        isMinimizing = true
+        binding.root.postDelayed({
+            if (isMinimizing) {
+                Tracker.trackMinimizeApplication()
+                isMinimized = true
+            }
+        }, 2500)
     }
 
     private fun isEmulator(): Boolean {
