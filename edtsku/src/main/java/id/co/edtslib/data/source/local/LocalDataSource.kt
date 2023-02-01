@@ -15,7 +15,10 @@ abstract class LocalDataSource<T>(private val sharedPreferences: SharedPreferenc
     private fun getKeyTimeName() = getKeyName().plus("_expired")
 
     open fun save(data: T?) {
-        if (data == null) return
+        if (data == null) {
+            clear()
+            return
+        }
 
         val editor: SharedPreferences.Editor = sharedPreferences.edit()
 
