@@ -1,10 +1,8 @@
 package id.co.edtslib.data.source.local
 
 import android.content.SharedPreferences
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.asFlow
 import com.google.gson.Gson
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import java.util.*
 
 abstract class LocalDataSource<T>(private val sharedPreferences: SharedPreferences) {
@@ -29,21 +27,8 @@ abstract class LocalDataSource<T>(private val sharedPreferences: SharedPreferenc
         editor.apply()
     }
 
-    open fun get(): Flow<T> {
-        val json = sharedPreferences.getString(getKeyName(), null)
-        if (json.isNullOrEmpty()) return MutableLiveData<T>().apply { postValue(null) }.asFlow()
-
-        if (expiredInterval() > 0) {
-            val lastUpdate = sharedPreferences.getLong(getKeyTimeName(), 0)
-            if (lastUpdate > 0) {
-                val expiredTime = lastUpdate + expiredInterval() * 1000
-                if (Date().time >= expiredTime) {
-                    return MutableLiveData<T>().apply { postValue(null) }.asFlow()
-                }
-            }
-        }
-
-        return MutableLiveData<T>().apply { postValue(getValue(json)) }.asFlow()
+    open fun get() = flow {
+        emit(getCached())
     }
 
     open fun clear() {
