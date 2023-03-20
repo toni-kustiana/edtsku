@@ -10,5 +10,5 @@ val mainRepositoryModule = module {
     single { HttpHeaderLocalSource(get()) }
     single { MainRemoteDataSource(get()) }
 
-    single<IMainRepository> { MainRepository(get(), get()) }
+    single<IMainRepository> { MainRepository(get(), get(), get()) }
 }

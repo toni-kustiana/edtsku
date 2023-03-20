@@ -1,6 +1,7 @@
 package id.co.edtslib.data.source
 
 import android.content.Context
+import id.co.edtslib.data.source.local.HttpHeaderLocalSource
 import id.co.edtslib.domain.model.DownloadResult
 import id.co.edtslib.domain.repository.IMainRepository
 import id.co.edtslib.data.source.remote.MainRemoteDataSource
@@ -14,13 +15,19 @@ import java.util.*
 
 class MainRepository(
     private val remoteDataSource: MainRemoteDataSource,
-    private val context: Context
+    private val context: Context,
+    private val headerLocalSource: HttpHeaderLocalSource
 ):
     IMainRepository {
     override fun download(url: String) = flow {
         val response = remoteDataSource.download(url)
         val result = saveFile(response.body())
         emit(result)
+    }
+
+    override fun getToken() = flow {
+        val cached = headerLocalSource.getCached()
+        emit(cached?.get("Authorization"))
     }
 
     private fun saveFile(body: ResponseBody?): DownloadResult {

@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface MainUseCase {
     fun download(url: String): Flow<DownloadResult?>
-
+    fun getToken(): Flow<String?>
 }

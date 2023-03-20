@@ -5,4 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface IMainRepository {
     fun download(url: String): Flow<DownloadResult?>
+    fun getToken(): Flow<String?>
 }
