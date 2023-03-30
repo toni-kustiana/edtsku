@@ -7,7 +7,7 @@ import android.webkit.WebView
 import id.co.edtslib.EdtsKu
 
 @SuppressLint("SetJavaScriptEnabled")
-class EdtsWebView : WebView {
+open class EdtsWebView : WebView {
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
