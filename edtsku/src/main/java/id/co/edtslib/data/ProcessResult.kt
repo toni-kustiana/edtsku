@@ -13,7 +13,7 @@ open class ProcessResult<T>(result: Result<T>, delegate: ProcessResultDelegate<T
                         delegate?.errorSystem()
                     }
                     else -> {
-                        delegate?.error(result.code, result.message)
+                        delegate?.error(result.code, result.message, result.data)
                     }
                 }
             }
