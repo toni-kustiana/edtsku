@@ -1,9 +1,9 @@
 package id.co.edts.edtsku.example
 
 import android.view.LayoutInflater
+import android.webkit.WebView
 import id.co.edts.edtsku.example.databinding.ActivityMainBinding
 import id.co.edtslib.uibase.BaseActivity
-import id.co.edtslib.uibase.WebActivity
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
 
@@ -11,7 +11,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         get() = ActivityMainBinding::inflate
 
     override fun setup() {
-        WebActivity.open(this, "https://qlarp-api.arsenadevelopment.eu/abah1.html")
+        val webView = findViewById<WebView>(R.id.webView)
+        webView.loadUrl("http://adilahsoft.com/test.php")
     }
 
     override fun clonerAllowed() = false
