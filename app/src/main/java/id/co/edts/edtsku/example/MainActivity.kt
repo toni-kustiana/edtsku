@@ -1,23 +1,19 @@
 package id.co.edts.edtsku.example
 
-import android.view.LayoutInflater
-import android.webkit.WebView
-import id.co.edts.edtsku.example.databinding.ActivityMainBinding
-import id.co.edtslib.uibase.BaseActivity
+import id.co.edtslib.uibase.WebActivity
 
-class MainActivity : BaseActivity<ActivityMainBinding>() {
+class MainActivity : WebActivity() {
 
-    override val bindingInflater: (LayoutInflater) -> ActivityMainBinding
-        get() = ActivityMainBinding::inflate
+    override fun getUserAgentAdditionalInfo(): Map<String, Any?> {
+        val map = HashMap<String, Any?>()
+        map["applicationNameForUserAgent"] = "klikindomaretmobile"
 
-    override fun setup() {
-        val webView = findViewById<WebView>(R.id.webView)
-        webView.loadUrl("http://adilahsoft.com/test.php")
+        return map
     }
 
-    override fun clonerAllowed() = false
-    override fun emulatorAllowed() = false
+    override fun setupPopup() {
+        super.setupPopup()
 
-    override fun getTrackerPageName(): String? = null
-
+        binding.webView.loadUrl("http://www.adilahsoft.com/test.php")
+    }
 }

@@ -32,6 +32,10 @@ open class WebActivity: PopupActivity<ActivityWebBinding>() {
         }
     }
 
+    protected open fun getUserAgentAdditionalInfo(): Map<String, Any?>? {
+        return null
+    }
+
     protected open fun errorView(): View? = null
     protected open fun showError(errorCode: Int?, errorDescription: String?) {
         binding.flError.isVisible = true
@@ -56,6 +60,7 @@ open class WebActivity: PopupActivity<ActivityWebBinding>() {
             binding.flError.addView(errorView)
         }
 
+        binding.webView.userAgentAdditionalInfo = getUserAgentAdditionalInfo()
         binding.flError.isVisible = false
         binding.flProgressBar.isVisible = false
 

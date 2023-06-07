@@ -20,9 +20,7 @@ open class EdtsWebView : WebView {
         defStyleAttr
     )
 
-    protected open fun userAgentAdditionalInfo(): Map<String, Any?>? {
-        return null
-    }
+    var userAgentAdditionalInfo: Map<String, Any?>? = null
 
     init {
         post {
@@ -30,7 +28,7 @@ open class EdtsWebView : WebView {
 
             val json = Gson().toJson(Tracker.getData())
             val userAgent = Gson().fromJson<MutableMap<String, Any?>>(json, object : TypeToken<MutableMap<String, Any?>>() {}.type)
-            userAgentAdditionalInfo()?.forEach {
+            userAgentAdditionalInfo?.forEach {
                 userAgent[it.key] = it.value
             }
 
