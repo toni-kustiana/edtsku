@@ -18,6 +18,7 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.Exception
+import java.util.concurrent.TimeUnit
 
 val networkingModule = module {
     single { provideOkHttpClient() }
@@ -91,7 +92,11 @@ private fun provideRetrofit(
     return Retrofit.Builder()
         .baseUrl(EdtsKu.baseUrlApi)
         .client(okHttpClient.newBuilder().addInterceptor(
-            AuthInterceptor(httpHeaderLocalSource, apps)).build())
+            AuthInterceptor(httpHeaderLocalSource, apps))
+            .callTimeout(20, TimeUnit.SECONDS)
+            .readTimeout(20, TimeUnit.SECONDS)
+            .connectTimeout(20, TimeUnit.SECONDS)
+            .build())
         .addConverterFactory(converterFactory)
         .build()
 }
