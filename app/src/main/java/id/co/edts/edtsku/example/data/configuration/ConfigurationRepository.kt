@@ -42,6 +42,9 @@ class ConfigurationRepository(
         object : NetworkBoundProcessResource<Session?, ApiResponse<SessionResponse>>(
             localSource, sessionRemoteDataSource
         ) {
+
+            override val pathSignatureIndex: Int? = null
+
             override suspend fun createCall() =
                 remoteDataSource.loginVisitor()
 
@@ -63,7 +66,7 @@ class ConfigurationRepository(
         object : NetworkBoundProcessResource<Session?, ApiResponse<SessionResponse>>(
             localSource, sessionRemoteDataSource
         ) {
-
+            override val pathSignatureIndex: Int? = null
 
             override suspend fun callBackResult(data: ApiResponse<SessionResponse>): Session? {
                 val dataMapper = sessionMapResponseToDomain(data.data)

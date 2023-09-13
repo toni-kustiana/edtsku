@@ -10,8 +10,21 @@ abstract class NetworkBoundProcessResource<ResultType, RequestType>(
     private val localDataSource: HttpHeaderLocalSource,
     private val sessionRemoteDataSource: SessionRemoteDataSource
 ) {
+
+    companion object {
+        const val pathSignatureKey = "pathSignature"
+    }
+
+    /**
+     * @property pathSignatureIndex: the index of path parameter counted backward
+     * */
+    abstract val pathSignatureIndex: Int?
+
     private val result: Flow<Result<ResultType>> = flow {
         emit(Result.loading())
+        if (pathSignatureIndex != null) {
+            localDataSource.setHeader(pathSignatureKey, pathSignatureIndex.toString())
+        }
         val response = createCall()
         when (response.status) {
             Result.Status.SUCCESS -> {
