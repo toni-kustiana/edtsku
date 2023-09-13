@@ -22,9 +22,9 @@ abstract class NetworkBoundProcessResource<ResultType, RequestType>(
 
     private val result: Flow<Result<ResultType>> = flow {
         emit(Result.loading())
-        if (pathSignatureIndex != null) {
-            localDataSource.setHeader(pathSignatureKey, pathSignatureIndex.toString())
-        }
+
+        localDataSource.setHeader(pathSignatureKey, pathSignatureIndex?.toString())
+
         val response = createCall()
         when (response.status) {
             Result.Status.SUCCESS -> {

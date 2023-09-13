@@ -8,6 +8,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import java.security.SecureRandom
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
+import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLContext
 import javax.net.ssl.SSLSession
 import javax.net.ssl.TrustManager
@@ -55,9 +56,21 @@ class UnsafeOkHttpClient {
             builder.addInterceptor(interceptor)
             builder.addNetworkInterceptor(StethoInterceptor())
 
+            if (EdtsKu.timeout != null) {
+                builder.callTimeout(EdtsKu.timeout!!, TimeUnit.SECONDS)
+                builder.connectTimeout(EdtsKu.timeout!!, TimeUnit.SECONDS)
+                builder.readTimeout(EdtsKu.timeout!!, TimeUnit.SECONDS)
+            }
+
             builder.build()
         } catch (e: Exception) {
-            OkHttpClient.Builder().addInterceptor(interceptor)
+            val builder = OkHttpClient.Builder()
+            if (EdtsKu.timeout != null) {
+                builder.callTimeout(EdtsKu.timeout!!, TimeUnit.SECONDS)
+                builder.connectTimeout(EdtsKu.timeout!!, TimeUnit.SECONDS)
+                builder.readTimeout(EdtsKu.timeout!!, TimeUnit.SECONDS)
+            }
+            builder.addInterceptor(interceptor)
                 .addNetworkInterceptor(StethoInterceptor())
                 .build()
         }

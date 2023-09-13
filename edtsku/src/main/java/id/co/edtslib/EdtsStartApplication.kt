@@ -21,6 +21,12 @@ class EdtsKu {
         var isTablet = false
         var packageName = ""
 
+        var enableSignature = false
+        var defaultPayload: String? = null
+        var privateKeyFileContent: String? = null
+
+        var timeout: Long? = null
+
         fun init(application: Application, baseUrlApi: String, refreshTokenPath: String, modules: List<Module>) {
             EdtsKu.baseUrlApi = baseUrlApi
             refreshTokenUrlApi = refreshTokenPath
