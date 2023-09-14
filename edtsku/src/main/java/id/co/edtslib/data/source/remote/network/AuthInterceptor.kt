@@ -119,7 +119,13 @@ class AuthInterceptor(
     private fun extractPathParam(path: String, idx: Int): String {
         val pathSegments = path.split("/")
         val size = pathSegments.size
-        return pathSegments[size-1-idx]
+
+        val pathIndex = size-1-idx
+        return if (pathIndex < size) {
+            pathSegments[pathIndex]
+        } else {
+            ""
+        }
     }
 
 }
