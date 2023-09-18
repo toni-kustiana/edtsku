@@ -8,6 +8,7 @@ import id.co.edtslib.data.source.remote.response.SessionResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Headers
 import retrofit2.http.POST
 
 interface ApiService {
@@ -15,7 +16,8 @@ interface ApiService {
     suspend fun login(@Body request: LoginRequest)
             : Response<ApiResponse<LoginResponse?>>
 
-    @GET("/customer/api/mobile/user/login-visitor")
+    @Headers("pathSignature: 1")
+    @POST("/customer/api/mobile/user/login-visitor")
     suspend fun loginVisitor(): Response<ApiResponse<SessionResponse>>
 
     @GET("/catalog/api/mobile/location/get-provinsi")
