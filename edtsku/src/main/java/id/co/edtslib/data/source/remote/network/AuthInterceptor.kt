@@ -1,6 +1,5 @@
 package id.co.edtslib.data.source.remote.network
 
-import id.co.edtslib.data.NetworkBoundProcessResource
 import id.co.edtslib.data.source.local.HttpHeaderLocalSource
 import id.co.edtslib.util.SecurityUtil
 import okhttp3.Interceptor
@@ -33,15 +32,10 @@ class AuthInterceptor(
     override fun intercept(chain: Interceptor.Chain): Response {
         val headers = httpHeaderLocalSource.getCached()
         val builder = chain.request().newBuilder()
-        var pathParamReverseIdx: String? = null
         if (headers != null) {
             for ((k, v) in headers) {
-                if (k == NetworkBoundProcessResource.pathSignatureKey) {
-                    pathParamReverseIdx = v
-                } else {
-                    if (v != null) {
-                        builder.addHeader(k, v)
-                    }
+                if (v != null) {
+                    builder.addHeader(k, v)
                 }
             }
         }
@@ -49,17 +43,24 @@ class AuthInterceptor(
         if (privateKeyFileContent != null && defaultPayload != null && enableSignature) {
             privateKey = SecurityUtil.getPrivateKeyFromKeyStore(privateKeyFileContent.split(", "))
             val requestCopy = builder.build()
-            val signature = getSignature(requestCopy, defaultPayload, pathParamReverseIdx)
+            val signature = getSignature(requestCopy, defaultPayload)
             builder.addHeader("signature", signature)
         }
+
+        builder.removeHeader("pathSignature")
 
         return chain.proceed(builder.build())
     }
 
-    private fun getSignature(requestCopy: Request, defaultPayload: String, pathParamReverseIdx: String?): String {
+    private fun getSignature(requestCopy: Request, defaultPayload: String): String {
         val method = requestCopy.method
         if (method == "GET") {
             return SecurityUtil.signWithPayload(defaultPayload, privateKey)
+        }
+
+        val contentType = requestCopy.body?.contentType()?.toString()
+        if (contentType?.contains("multipart/form-data") == true) {
+            return SecurityUtil.signWithPayload(apps, privateKey)
         }
 
         val body = minifyRequestBody(requestCopy.body)
@@ -73,6 +74,7 @@ class AuthInterceptor(
             return SecurityUtil.signWithPayload(queryValue, privateKey)
         }
 
+        val pathParamReverseIdx = requestCopy.header("pathSignature")
         if (pathParamReverseIdx != null) {
             return try {
                 val pathIdx = pathParamReverseIdx.toInt()
