@@ -48,6 +48,7 @@ class AuthInterceptor(
         }
 
         builder.removeHeader("pathSignature")
+        builder.removeHeader("usingAppsSignature")
 
         return chain.proceed(builder.build())
     }
@@ -59,7 +60,9 @@ class AuthInterceptor(
         }
 
         val contentType = requestCopy.body?.contentType()?.toString()
-        if (contentType?.contains("multipart/form-data") == true) {
+        val usingAppsSignature = requestCopy.header("usingAppsSignature")
+        if (contentType?.contains("multipart/form-data") == true ||
+            usingAppsSignature == "true") {
             return SecurityUtil.signWithPayload(apps, privateKey)
         }
 
