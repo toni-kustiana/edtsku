@@ -1,5 +1,6 @@
 package id.co.edtslib.data.source.remote.network
 
+import id.co.edtslib.EdtsKu
 import id.co.edtslib.data.source.local.HttpHeaderLocalSource
 import id.co.edtslib.util.SecurityUtil
 import okhttp3.Interceptor
@@ -14,16 +15,10 @@ import java.security.PrivateKey
  * A {@see RequestInterceptor} that adds an auth token to requests
  *
  * @constructor Create an auth interceptor
- * @param privateKeyFileContent: privateKey file content which used ", " for every new line
- * @param defaultPayload: string value which used as a default payload of signature process
- * @param enableSignature: used to activate or deactivate signature functionality
  * */
 class AuthInterceptor(
     private val httpHeaderLocalSource: HttpHeaderLocalSource,
-    private val apps: String,
-    private val privateKeyFileContent: String? = null,
-    private val defaultPayload: String? = null,
-    private val enableSignature: Boolean = false,
+    private val apps: String
 ) : Interceptor {
 
     private var privateKey: PrivateKey? = null
@@ -40,10 +35,11 @@ class AuthInterceptor(
             }
         }
         builder.addHeader("apps", apps)
-        if (privateKeyFileContent != null && defaultPayload != null && enableSignature) {
-            privateKey = SecurityUtil.getPrivateKeyFromKeyStore(privateKeyFileContent.split(", "))
+        if (EdtsKu.privateKeyFileContent != null && EdtsKu.defaultPayload != null &&
+            EdtsKu.enableSignature) {
+            privateKey = SecurityUtil.getPrivateKeyFromKeyStore(EdtsKu.privateKeyFileContent!!.split(", "))
             val requestCopy = builder.build()
-            val signature = getSignature(requestCopy, defaultPayload)
+            val signature = getSignature(requestCopy, EdtsKu.defaultPayload!!)
             builder.addHeader("signature", signature)
         }
 

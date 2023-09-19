@@ -98,10 +98,7 @@ private fun provideRetrofit(
         .client(
             okHttpClient.newBuilder().addInterceptor(
                 AuthInterceptor(httpHeaderLocalSource = httpHeaderLocalSource,
-                    apps = apps,
-                    privateKeyFileContent = EdtsKu.privateKeyFileContent,
-                    defaultPayload = EdtsKu.defaultPayload,
-                    enableSignature = EdtsKu.enableSignature)
+                    apps = apps)
             ).build()
         )
         .addConverterFactory(converterFactory)
