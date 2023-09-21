@@ -52,84 +52,83 @@ abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
         _binding = bindingInflater.invoke(layoutInflater)
         setContentView(requireNotNull(_binding).root)
 
-        remoteConfigSetup {
-            if (! clonerAllowed()) {
-                if (CheckCloner(this).check()) {
-                    finish()
-                }
-                else
-                    if (emulatorAllowed()) {
-                        setup()
-                    }
-                    else if (isEmulator()) {
-                        finish()
-                    }
-                    else {
-                        setup()
-                    }
+        remoteConfigSetup()
+
+        if (! clonerAllowed()) {
+            if (CheckCloner(this).check()) {
+                finish()
             }
-            else {
+            else
                 if (emulatorAllowed()) {
                     setup()
                 }
-                else if (isEmulator()) {
-                    finish()
+            else if (isEmulator()) {
+                finish()
                 }
-                else {
-                    setup()
+            else {
+                setup()
                 }
+        }
+        else {
+            if (emulatorAllowed()) {
+                setup()
             }
-
-            if (getTrackerPageName() != null) {
-                Tracker.trackPage(getTrackerPageName()!!, getTrackerPageId()!!)
+            else if (isEmulator()) {
+                finish()
             }
+            else {
+                setup()
+            }
+        }
 
-            onBackPressedDispatcher.addCallback {
-                if (canBack()) {
-                    if (isHomeActivity()) {
-                        if (quitRunnable != null) {
-                            handler?.removeCallbacks(quitRunnable!!)
+        if (getTrackerPageName() != null) {
+            Tracker.trackPage(getTrackerPageName()!!, getTrackerPageId()!!)
+        }
+
+        onBackPressedDispatcher.addCallback {
+            if (canBack()) {
+                if (isHomeActivity()) {
+                    if (quitRunnable != null) {
+                        handler?.removeCallbacks(quitRunnable!!)
+                    }
+
+                    if (quit) {
+                        toastQuit?.cancel()
+                        finishAffinity()
+                    } else {
+                        quit = true
+
+                        quitRunnable = Runnable {
+                            toastQuit?.cancel()
+                            quit = false
                         }
 
-                        if (quit) {
-                            toastQuit?.cancel()
-                            finishAffinity()
-                        } else {
-                            quit = true
+                        toastQuit = Toast.makeText(
+                            this@BaseActivity,
+                            R.string.tap_for_quit,
+                            Toast.LENGTH_LONG
+                        )
+                        toastQuit?.show()
 
-                            quitRunnable = Runnable {
-                                toastQuit?.cancel()
-                                quit = false
-                            }
-
-                            toastQuit = Toast.makeText(
-                                this@BaseActivity,
-                                R.string.tap_for_quit,
-                                Toast.LENGTH_LONG
-                            )
-                            toastQuit?.show()
-
-                            handler = Handler(Looper.myLooper()!!)
-                            if (quitRunnable != null) {
-                                handler?.postDelayed(quitRunnable!!, 3500)
-                            }
+                        handler = Handler(Looper.myLooper()!!)
+                        if (quitRunnable != null) {
+                            handler?.postDelayed(quitRunnable!!, 3500)
                         }
                     }
-                    else {
-                        try {
-                            finish()
-                        } catch (e: IllegalArgumentException) {
-                            // nothing to do
-                        }
+                }
+                else {
+                    try {
+                        finish()
+                    } catch (e: IllegalArgumentException) {
+                        // nothing to do
                     }
                 }
             }
         }
-
         //baseViewModel.trackFlush()
     }
 
-    private fun remoteConfigSetup(onComplete: () -> Unit) {
+    private fun remoteConfigSetup() {
         val uri = "@xml/remote_config"
         val resId = resources.getIdentifier(uri, "xml", packageName)
         if (resId != 0) {
@@ -141,7 +140,7 @@ abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
                 .build()
             mFirebaseRemoteConfig.setConfigSettingsAsync(configSettings)
             mFirebaseRemoteConfig.fetchAndActivate().addOnCompleteListener {
-                onComplete()
+                // nothing to do
             }
         }
     }
