@@ -67,12 +67,17 @@ class AuthInterceptor(
             return SecurityUtil.signWithPayload(body, privateKey)
         }
 
+        /**
+         * Unused for now
         val query = requestCopy.url.encodedQuery
         val queryValue = extractQuery(query)
         if (queryValue.isNotEmpty()) {
             return SecurityUtil.signWithPayload(queryValue, privateKey)
         }
+        */
 
+        /**
+         * Unused for now
         val pathParamReverseIdx = requestCopy.header("pathSignature")
         if (pathParamReverseIdx != null) {
             return try {
@@ -84,6 +89,7 @@ class AuthInterceptor(
                 SecurityUtil.signWithPayload(defaultPayload, privateKey)
             }
         }
+        */
 
         return SecurityUtil.signWithPayload(defaultPayload, privateKey)
     }
