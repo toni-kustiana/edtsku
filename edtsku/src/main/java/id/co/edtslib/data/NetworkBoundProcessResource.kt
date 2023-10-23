@@ -25,7 +25,8 @@ abstract class NetworkBoundProcessResource<ResultType, RequestType>(
                         Result.error(
                             response.code,
                             response.message,
-                            onResponseError(response.data)
+                            onResponseError(response.data),
+                            response.url
                         )
                     )
                 }
@@ -48,12 +49,12 @@ abstract class NetworkBoundProcessResource<ResultType, RequestType>(
                         }
                         else -> {
                             localDataSource.logout()
-                            emit(Result.unauthorized<ResultType>(response.message))
+                            emit(Result.unauthorized<ResultType>(response.message, response.url))
                         }
                     }
                 } else {
                     localDataSource.logout()
-                    emit(Result.unauthorized<ResultType>(response.message))
+                    emit(Result.unauthorized<ResultType>(response.message, response.url))
                 }
             }
             else -> {
@@ -61,7 +62,8 @@ abstract class NetworkBoundProcessResource<ResultType, RequestType>(
                     Result.error(
                         response.code,
                         response.message,
-                        onResponseError(response.data)
+                        onResponseError(response.data),
+                        response.url
                     )
                 )
             }

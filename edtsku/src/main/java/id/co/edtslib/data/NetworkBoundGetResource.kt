@@ -35,7 +35,8 @@ abstract class NetworkBoundGetResource<ResultType, RequestType>(
                                 Result.error(
                                     response.code,
                                     response.message,
-                                    it
+                                    it,
+                                    response.url
                                 )
                             }
                         )
@@ -62,12 +63,12 @@ abstract class NetworkBoundGetResource<ResultType, RequestType>(
                             }
                             else -> {
                                 localDataSource.logout()
-                                emit(Result.unauthorized<ResultType>(response.message))
+                                emit(Result.unauthorized<ResultType>(response.message, response.url))
                             }
                         }
                     } else {
                         localDataSource.logout()
-                        emit(Result.unauthorized<ResultType>(response.message))
+                        emit(Result.unauthorized<ResultType>(response.message, response.url))
                     }
                 }
                 else -> {
@@ -76,7 +77,8 @@ abstract class NetworkBoundGetResource<ResultType, RequestType>(
                             Result.error(
                                 response.code,
                                 response.message,
-                                it
+                                it,
+                                response.url
                             )
                         }
                     )

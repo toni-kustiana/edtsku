@@ -20,6 +20,9 @@ class AuthInterceptor(
     private val httpHeaderLocalSource: HttpHeaderLocalSource,
     private val apps: String
 ) : Interceptor {
+    companion object {
+        var url: String? = null // sementara karena belum tau callback ke get result
+    }
 
     private var privateKey: PrivateKey? = null
 
@@ -27,6 +30,8 @@ class AuthInterceptor(
     override fun intercept(chain: Interceptor.Chain): Response {
         val headers = httpHeaderLocalSource.getCached()
         val builder = chain.request().newBuilder()
+        val requestCopy = builder.build()
+
         if (headers != null) {
             for ((k, v) in headers) {
                 if (v != null) {
@@ -38,13 +43,14 @@ class AuthInterceptor(
         if (EdtsKu.privateKeyFileContent != null && EdtsKu.defaultPayload != null &&
             EdtsKu.enableSignature) {
             privateKey = SecurityUtil.getPrivateKeyFromKeyStore(EdtsKu.privateKeyFileContent!!.split(", "))
-            val requestCopy = builder.build()
             val signature = getSignature(requestCopy, EdtsKu.defaultPayload!!)
             builder.addHeader("signature", signature)
         }
 
         builder.removeHeader("pathSignature")
         builder.removeHeader("usingAppsSignature")
+
+        url = requestCopy.url.toString()
 
         return chain.proceed(builder.build())
     }

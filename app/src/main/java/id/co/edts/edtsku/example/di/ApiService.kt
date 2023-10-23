@@ -17,7 +17,7 @@ interface ApiService {
             : Response<ApiResponse<LoginResponse?>>
 
     @Headers("pathSignature: 1")
-    @POST("/customer/api/mobile/user/login-visitor")
+    @GET("/catalog/api/mobile/location/get-provinsi")
     suspend fun loginVisitor(): Response<ApiResponse<SessionResponse>>
 
     @GET("/catalog/api/mobile/location/get-provinsi")

@@ -3,6 +3,7 @@ package id.co.edtslib.data
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.MalformedJsonException
+import id.co.edtslib.data.source.remote.network.AuthInterceptor
 import id.co.edtslib.data.source.remote.response.ApiContentResponse
 import id.co.edtslib.data.source.remote.response.ApiResponse
 import id.co.edtslib.util.ErrorMessage
@@ -33,17 +34,20 @@ abstract class BaseDataSource {
                             if (body.isSuccess()) {
                                 Result.success(body)
                             } else {
-                                Result.error(body.status, body.message, body.data?.content as T?)
+                                Result.error(body.status, body.message, body.data?.content as T?,
+                                    response.raw().request.url.toString())
                             }
                         }
                         else {
-                            Result.error(body.status, body.message, body.data as T?)
+                            Result.error(body.status, body.message, body.data as T?,
+                                response.raw().request.url.toString())
                         }
                     } else {
                         Result.success(body)
                     }
                 } else {
-                    Result.error("BODYNULL", ErrorMessage().connection(), null)
+                    Result.error("BODYNULL", ErrorMessage().connection(), null,
+                        response.raw().request.url.toString())
                 }
             }
             else {
@@ -62,17 +66,21 @@ abstract class BaseDataSource {
                                 object : TypeToken<ApiResponse<Any>?>() {}.type
                             )
                             if (badResponse.data != null) {
-                                Result.unauthorized(badResponse.message)
+                                Result.unauthorized(badResponse.message,
+                                    response.raw().request.url.toString())
                             }
                             else {
-                                Result.unauthorized(badResponse.message)
+                                Result.unauthorized(badResponse.message,
+                                    response.raw().request.url.toString())
                             }
                         }
                         catch (e: Exception) {
-                            Result.unauthorized(json)
+                            Result.unauthorized(json,
+                                response.raw().request.url.toString())
                         }
                     } else {
-                        Result.unauthorized(null)
+                        Result.unauthorized(null,
+                            response.raw().request.url.toString())
                     })
                 } else
                     if (code == 400 || code == 500) {
@@ -88,24 +96,28 @@ abstract class BaseDataSource {
                                 object : TypeToken<ApiResponse<Any>?>() {}.type
                             )
                             return if (code == 500) {
-                                Result.error("SystemError", badResponse.message)
+                                Result.error("SystemError", badResponse.message, null,
+                                    response.raw().request.url.toString())
 
                             } else {
-                                Result.error(badResponse.status, badResponse.message)
+                                Result.error(badResponse.status, badResponse.message, null,
+                                    response.raw().request.url.toString())
                             }
                         }
                     }
                     else if (code == 503) {
-                        return Result.error("503", ErrorMessage().http503())
+                        return Result.error("503", ErrorMessage().http503(), null,
+                            response.raw().request.url.toString())
                     }
             }
-            return Result.error(code.toString(), response.message())
+            return Result.error(code.toString(), response.message(), null,
+                response.raw().request.url.toString())
         } catch (e: Exception) {
             return if (e is ConnectException || e is UnknownHostException ||
                 e is MalformedJsonException || e is SocketTimeoutException) {
-                Result.error("ConnectionError", ErrorMessage().connection())
+                Result.error("ConnectionError", ErrorMessage().connection(), null, AuthInterceptor.url)
             } else {
-                Result.error("999", ErrorMessage().system(e.message))
+                Result.error("999", ErrorMessage().system(e.message), null, AuthInterceptor.url)
             }
         }
     }
