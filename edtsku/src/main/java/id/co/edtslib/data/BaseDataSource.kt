@@ -20,7 +20,7 @@ import java.nio.charset.Charset
  */
 abstract class BaseDataSource {
 
-    protected suspend fun <T> getResult(call: suspend () -> Response<T>): Result<T> {
+    protected suspend fun <T> getResult(isRefreshToken: Boolean = true, call: suspend () -> Response<T>): Result<T> {
         try {
             val response = call()
             val code = response.code()
@@ -67,21 +67,50 @@ abstract class BaseDataSource {
                                 object : TypeToken<ApiResponse<Any>?>() {}.type
                             )
                             if (badResponse.data != null) {
-                                trackerFailed(reason = "401", url = response.raw().request.url.toString())
-                                Result.unauthorized(badResponse.message)
+                                if (isRefreshToken) {
+                                    getResult(false, call)
+                                }
+                                else {
+                                    trackerFailed(reason = "401", url = response.raw().request.url.toString())
+                                    Result.unauthorized(badResponse.message)
+                                }
                             }
                             else {
-                                trackerFailed(reason = "401", url = response.raw().request.url.toString())
-                                Result.unauthorized(badResponse.message)
+                                if (isRefreshToken) {
+                                    getResult(false, call)
+                                }
+                                else {
+                                    trackerFailed(
+                                        reason = "401",
+                                        url = response.raw().request.url.toString()
+                                    )
+                                    Result.unauthorized(badResponse.message)
+                                }
                             }
                         }
                         catch (e: Exception) {
-                            trackerFailed(reason = "401", url = response.raw().request.url.toString())
-                            Result.unauthorized(json)
+                            if (isRefreshToken) {
+                                getResult(false, call)
+                            }
+                            else {
+                                trackerFailed(
+                                    reason = "401",
+                                    url = response.raw().request.url.toString()
+                                )
+                                Result.unauthorized(json)
+                            }
                         }
                     } else {
-                        trackerFailed(reason = "401", url = response.raw().request.url.toString())
-                        Result.unauthorized(null)
+                        if (isRefreshToken) {
+                            getResult(false, call)
+                        }
+                        else {
+                            trackerFailed(
+                                reason = "401",
+                                url = response.raw().request.url.toString()
+                            )
+                            Result.unauthorized(null)
+                        }
                     })
                 } else
                     if (code == 400 || code == 500) {
