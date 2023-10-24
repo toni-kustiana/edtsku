@@ -5,6 +5,7 @@ import id.co.edts.edtsku.example.di.appModule
 import id.co.edts.edtsku.example.di.repositoryModule
 import id.co.edts.edtsku.example.di.viewModelModule
 import id.co.edtslib.EdtsKu
+import id.co.edtslib.tracker.Tracker
 import id.co.edtslib.util.CommonUtil
 import timber.log.Timber
 
@@ -24,6 +25,8 @@ class App : Application() {
             CommonUtil.hexToAscii("7368613235362f71316e6673616d64614d666a44464b6e54367574315433614c73783250383851754257445a6a595a7048733d")
         EdtsKu.sslDomain =
             CommonUtil.hexToAscii("656c6576656e69612e636f2e6964")
+
+        Tracker.debugging = BuildConfig.DEBUG
 
         EdtsKu.init(
             application = this,

@@ -26,14 +26,14 @@ class ConfigurationRepository(
                     emit(Result.success(response.data?.data))
 
                 } else {
-                    emit(Result.error<LoginResponse?>(response.code, response.message, null, response.url))
+                    emit(Result.error<LoginResponse?>(response.code, response.message, null))
                 }
             }
             Result.Status.UNAUTHORIZED -> {
                 emit(Result.unauthorized(response.message))
             }
             else -> {
-                emit(Result.error<LoginResponse?>(response.code, response.message, null, response.url))
+                emit(Result.error<LoginResponse?>(response.code, response.message, null))
             }
         }
     }

@@ -6,6 +6,7 @@ import com.google.gson.stream.MalformedJsonException
 import id.co.edtslib.data.source.remote.network.AuthInterceptor
 import id.co.edtslib.data.source.remote.response.ApiContentResponse
 import id.co.edtslib.data.source.remote.response.ApiResponse
+import id.co.edtslib.tracker.Tracker
 import id.co.edtslib.util.ErrorMessage
 import okio.BufferedSource
 import retrofit2.Response
@@ -34,20 +35,20 @@ abstract class BaseDataSource {
                             if (body.isSuccess()) {
                                 Result.success(body)
                             } else {
-                                Result.error(body.status, body.message, body.data?.content as T?,
-                                    response.raw().request.url.toString())
+                                trackerFailed(reason = body.status, url = response.raw().request.url.toString())
+                                Result.error(body.status, body.message, body.data?.content as T?)
                             }
                         }
                         else {
-                            Result.error(body.status, body.message, body.data as T?,
-                                response.raw().request.url.toString())
+                            trackerFailed(reason = body.status, url = response.raw().request.url.toString())
+                            Result.error(body.status, body.message, body.data as T?)
                         }
                     } else {
                         Result.success(body)
                     }
                 } else {
-                    Result.error("BODYNULL", ErrorMessage().connection(), null,
-                        response.raw().request.url.toString())
+                    trackerFailed(reason = "BODYNULL", url = response.raw().request.url.toString())
+                    Result.error("BODYNULL", ErrorMessage().connection(), null)
                 }
             }
             else {
@@ -66,21 +67,21 @@ abstract class BaseDataSource {
                                 object : TypeToken<ApiResponse<Any>?>() {}.type
                             )
                             if (badResponse.data != null) {
-                                Result.unauthorized(badResponse.message,
-                                    response.raw().request.url.toString())
+                                trackerFailed(reason = "401", url = response.raw().request.url.toString())
+                                Result.unauthorized(badResponse.message)
                             }
                             else {
-                                Result.unauthorized(badResponse.message,
-                                    response.raw().request.url.toString())
+                                trackerFailed(reason = "401", url = response.raw().request.url.toString())
+                                Result.unauthorized(badResponse.message)
                             }
                         }
                         catch (e: Exception) {
-                            Result.unauthorized(json,
-                                response.raw().request.url.toString())
+                            trackerFailed(reason = "401", url = response.raw().request.url.toString())
+                            Result.unauthorized(json)
                         }
                     } else {
-                        Result.unauthorized(null,
-                            response.raw().request.url.toString())
+                        trackerFailed(reason = "401", url = response.raw().request.url.toString())
+                        Result.unauthorized(null)
                     })
                 } else
                     if (code == 400 || code == 500) {
@@ -96,31 +97,38 @@ abstract class BaseDataSource {
                                 object : TypeToken<ApiResponse<Any>?>() {}.type
                             )
                             return if (code == 500) {
-                                Result.error("SystemError", badResponse.message, null,
-                                    response.raw().request.url.toString())
+                                trackerFailed(reason = "SystemError", url = response.raw().request.url.toString())
+                                Result.error("SystemError", badResponse.message, null)
 
                             } else {
-                                Result.error(badResponse.status, badResponse.message, null,
-                                    response.raw().request.url.toString())
+                                trackerFailed(reason = badResponse.status, url = response.raw().request.url.toString())
+                                Result.error(badResponse.status, badResponse.message, null)
                             }
                         }
                     }
                     else if (code == 503) {
-                        return Result.error("503", ErrorMessage().http503(), null,
-                            response.raw().request.url.toString())
+                        trackerFailed(reason = "503", url = response.raw().request.url.toString())
+                        return Result.error("503", ErrorMessage().http503(), null)
                     }
             }
-            return Result.error(code.toString(), response.message(), null,
-                response.raw().request.url.toString())
+            return Result.error(code.toString(), response.message(), null)
         } catch (e: Exception) {
             return if (e is ConnectException || e is UnknownHostException ||
                 e is MalformedJsonException || e is SocketTimeoutException) {
-                Result.error("ConnectionError", ErrorMessage().connection(), null, AuthInterceptor.url)
+                trackerFailed(reason = e.message, url = AuthInterceptor.url)
+                Result.error("ConnectionError", ErrorMessage().connection(), null)
             } else {
-                Result.error("999", ErrorMessage().system(e.message), null, AuthInterceptor.url)
+                trackerFailed(reason = e.message, url = AuthInterceptor.url)
+                Result.error("999", ErrorMessage().system(e.message), null)
             }
         }
     }
 
+    private fun trackerFailed(reason: String?, url: String?) {
+        Tracker.trackSubmissionFailed(name = "api_failed",
+                category = "",
+                reason = reason,
+                details = url)
+    }
 
 }

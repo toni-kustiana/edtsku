@@ -1,6 +1,5 @@
 package id.co.edts.edtsku.example
 
-import android.util.Log
 import android.view.LayoutInflater
 import id.co.edts.edtsku.example.databinding.ActivityMainBinding
 import id.co.edtslib.uibase.BaseActivity
@@ -12,9 +11,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         get() = ActivityMainBinding::inflate
 
     override fun getTrackerPageName(): String? = null
+
     override fun setup() {
         viewModel.loginVisitor().observeForever {
-            Log.d("abah", "abah $it")
+
 
         }
     }

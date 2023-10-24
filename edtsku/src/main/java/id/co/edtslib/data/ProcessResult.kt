@@ -7,17 +7,17 @@ open class ProcessResult<T>(result: Result<T>, delegate: ProcessResultDelegate<T
             Result.Status.ERROR -> {
                 when (result.code) {
                     "ConnectionError" -> {
-                        delegate?.errorConnection(result.url)
+                        delegate?.errorConnection()
                     }
                     "SystemError" -> {
-                        delegate?.errorSystem(result.url)
+                        delegate?.errorSystem()
                     }
                     else -> {
-                        delegate?.error(result.code, result.message, result.data, result.url)
+                        delegate?.error(result.code, result.message, result.data)
                     }
                 }
             }
-            Result.Status.UNAUTHORIZED -> delegate?.unAuthorize(result.message, result.url)
+            Result.Status.UNAUTHORIZED -> delegate?.unAuthorize(result.message)
             Result.Status.SUCCESS -> delegate?.success(result.data)
         }
     }
