@@ -8,6 +8,8 @@ import id.co.edtslib.data.source.remote.response.ApiContentResponse
 import id.co.edtslib.data.source.remote.response.ApiResponse
 import id.co.edtslib.tracker.Tracker
 import id.co.edtslib.util.ErrorMessage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okio.BufferedSource
 import retrofit2.Response
 import java.net.ConnectException
@@ -153,11 +155,23 @@ abstract class BaseDataSource {
         }
     }
 
-    private fun trackerFailed(reason: String?, url: String?) {
-        Tracker.trackSubmissionFailed(name = "api_failed",
-                category = "",
-                reason = reason,
-                details = url)
+    private suspend fun trackerFailed(reason: String?, url: String?) {
+        try {
+            withContext(Dispatchers.Main) {
+                try {
+                    Tracker.trackSubmissionFailed(name = "api_failed",
+                        category = "",
+                        reason = reason,
+                        details = url)
+                }
+                catch (ignore: Exception) {
+
+                }
+            }
+        }
+        catch (ignore: Exception) {
+
+        }
     }
 
 }
