@@ -22,12 +22,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="id.co.edtslib.uibase.WebActivity"
-            android:theme="@style/Theme.EdtsKu"
-            android:exported="true">
-            <meta-data android:name="progressBackground" android:resource="@color/actionBarColor" />
-        </activity>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

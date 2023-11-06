@@ -1,7 +1,6 @@
 package id.co.edtslib.uibase
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
@@ -32,6 +31,42 @@ open class WebActivity: PopupActivity<ActivityWebBinding>() {
         }
     }
 
+    protected open fun onPageFinished(url: String?) {
+        binding.flProgressBar.isVisible = false
+    }
+    protected open fun onPageCommitVisible(url: String?) {
+        binding.flProgressBar.isVisible = false
+    }
+    @RequiresApi(Build.VERSION_CODES.M)
+    protected open fun  onReceivedError(
+        request: WebResourceRequest?,
+        error: WebResourceError?
+    ) {
+        if (binding.webView.url == request?.url?.toString() && error?.errorCode != -1) {
+            showError(error?.errorCode, error?.description?.toString())
+        }
+    }
+    protected open fun onReceivedHttpError(
+        request: WebResourceRequest?,
+        errorResponse: WebResourceResponse?
+    ) {
+        if (binding.webView.url == request?.url?.toString()) {
+            showError(errorResponse?.statusCode, errorResponse?.toString())
+        }
+    }
+    protected open fun onReceivedError(
+        errorCode: Int,
+        description: String?,
+        failingUrl: String?
+    ) {
+        if (binding.webView.url == failingUrl) {
+            showError(errorCode, description)
+        }
+    }
+    protected open fun shouldOverrideUrlLoading(
+        request: WebResourceRequest?
+    ) = false
+
     protected open fun getUserAgentAdditionalInfo(): Map<String, Any?>? {
         return null
     }
@@ -41,7 +76,6 @@ open class WebActivity: PopupActivity<ActivityWebBinding>() {
         binding.flError.isVisible = true
         binding.webView.isVisible = false
     }
-    protected open fun shouldOverrideUrlLoading(uri: Uri?) = false
 
     override val bindingInflater: (LayoutInflater) -> ActivityWebBinding
         get() = ActivityWebBinding::inflate
@@ -64,17 +98,13 @@ open class WebActivity: PopupActivity<ActivityWebBinding>() {
         binding.flError.isVisible = false
         binding.flProgressBar.isVisible = false
 
-        binding.webView.webViewClient = object : WebViewClient() {
+        binding.webView.delegate = object : EdtsWebDelegate {
             override fun onPageFinished(view: WebView?, url: String?) {
-                super.onPageFinished(view, url)
-
-                binding.flProgressBar.isVisible = false
+                onPageFinished(url)
             }
 
             override fun onPageCommitVisible(view: WebView?, url: String?) {
-                super.onPageCommitVisible(view, url)
-
-                binding.flProgressBar.isVisible = false
+                onPageCommitVisible(url)
             }
 
             @RequiresApi(Build.VERSION_CODES.M)
@@ -83,21 +113,7 @@ open class WebActivity: PopupActivity<ActivityWebBinding>() {
                 request: WebResourceRequest?,
                 error: WebResourceError?
             ) {
-                if (view?.url == request?.url?.toString() && error?.errorCode != -1) {
-                    showError(error?.errorCode, error?.description?.toString())
-                }
-                super.onReceivedError(view, request, error)
-            }
-
-            override fun onReceivedHttpError(
-                view: WebView?,
-                request: WebResourceRequest?,
-                errorResponse: WebResourceResponse?
-            ) {
-                if (view?.url == request?.url?.toString()) {
-                    showError(errorResponse?.statusCode, errorResponse?.toString())
-                }
-                super.onReceivedHttpError(view, request, errorResponse)
+               onReceivedError(request, error)
             }
 
             override fun onReceivedError(
@@ -106,17 +122,24 @@ open class WebActivity: PopupActivity<ActivityWebBinding>() {
                 description: String?,
                 failingUrl: String?
             ) {
-                if (view?.url == failingUrl) {
-                    showError(errorCode, description)
-                }
+                onReceivedError(errorCode, description, failingUrl)
+            }
+
+            override fun onReceivedHttpError(
+                view: WebView?,
+                request: WebResourceRequest?,
+                errorResponse: WebResourceResponse?
+            ) {
+                onReceivedHttpError(request, errorResponse)
             }
 
             override fun shouldOverrideUrlLoading(
                 view: WebView?,
                 request: WebResourceRequest?
             ): Boolean {
-                return shouldOverrideUrlLoading(request?.url)
+                return shouldOverrideUrlLoading(request)
             }
+
         }
     }
 
