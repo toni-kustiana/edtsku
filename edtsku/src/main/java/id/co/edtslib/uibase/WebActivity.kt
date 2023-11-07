@@ -1,6 +1,7 @@
 package id.co.edtslib.uibase
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
@@ -63,9 +64,7 @@ open class WebActivity: PopupActivity<ActivityWebBinding>() {
             showError(errorCode, description)
         }
     }
-    protected open fun shouldOverrideUrlLoading(
-        request: WebResourceRequest?
-    ) = false
+    protected open fun shouldOverrideUrlLoading(uri: Uri?) = false
 
     protected open fun getUserAgentAdditionalInfo(): Map<String, Any?>? {
         return null
@@ -137,7 +136,7 @@ open class WebActivity: PopupActivity<ActivityWebBinding>() {
                 view: WebView?,
                 request: WebResourceRequest?
             ): Boolean {
-                return shouldOverrideUrlLoading(request)
+                return shouldOverrideUrlLoading(request?.url)
             }
 
         }
