@@ -107,5 +107,8 @@ dependencies {
     // splashscreen
     implementation "androidx.core:core-splashscreen:1.0.0"
 
+    // roo
+    implementation 'com.scottyab:rootbeer-lib:0.1.0'
+
 
 }

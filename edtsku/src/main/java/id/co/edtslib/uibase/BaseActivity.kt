@@ -13,6 +13,7 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import id.co.edtslib.R
 import id.co.edtslib.tracker.Tracker
+import id.co.edtslib.util.MyRootBeer
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Date
 
@@ -45,6 +46,7 @@ abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
     open fun isHomeActivity() = false
     open fun clonerAllowed() = true
     open fun emulatorAllowed() = true
+    open fun rootAllowed() = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,78 +56,79 @@ abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
 
         remoteConfigSetup()
 
-        if (! clonerAllowed()) {
-            if (CheckCloner(this).check()) {
-                finish()
+        if (isPreRequisite()) {
+            setup()
+
+            if (getTrackerPageName() != null) {
+                Tracker.trackPage(getTrackerPageName()!!, getTrackerPageId()!!)
             }
-            else
-                if (emulatorAllowed()) {
-                    setup()
-                }
-            else if (isEmulator()) {
-                finish()
-                }
-            else {
-                setup()
-                }
-        }
-        else {
-            if (emulatorAllowed()) {
-                setup()
-            }
-            else if (isEmulator()) {
-                finish()
-            }
-            else {
-                setup()
-            }
-        }
 
-        if (getTrackerPageName() != null) {
-            Tracker.trackPage(getTrackerPageName()!!, getTrackerPageId()!!)
-        }
-
-        onBackPressedDispatcher.addCallback {
-            if (canBack()) {
-                if (isHomeActivity()) {
-                    if (quitRunnable != null) {
-                        handler?.removeCallbacks(quitRunnable!!)
-                    }
-
-                    if (quit) {
-                        toastQuit?.cancel()
-                        finishAffinity()
-                    } else {
-                        quit = true
-
-                        quitRunnable = Runnable {
-                            toastQuit?.cancel()
-                            quit = false
-                        }
-
-                        toastQuit = Toast.makeText(
-                            this@BaseActivity,
-                            R.string.tap_for_quit,
-                            Toast.LENGTH_LONG
-                        )
-                        toastQuit?.show()
-
-                        handler = Handler(Looper.myLooper()!!)
+            onBackPressedDispatcher.addCallback {
+                if (canBack()) {
+                    if (isHomeActivity()) {
                         if (quitRunnable != null) {
-                            handler?.postDelayed(quitRunnable!!, 3500)
+                            handler?.removeCallbacks(quitRunnable!!)
                         }
-                    }
-                }
-                else {
-                    try {
-                        finish()
-                    } catch (e: IllegalArgumentException) {
-                        // nothing to do
+
+                        if (quit) {
+                            toastQuit?.cancel()
+                            finishAffinity()
+                        } else {
+                            quit = true
+
+                            quitRunnable = Runnable {
+                                toastQuit?.cancel()
+                                quit = false
+                            }
+
+                            toastQuit = Toast.makeText(
+                                this@BaseActivity,
+                                R.string.tap_for_quit,
+                                Toast.LENGTH_LONG
+                            )
+                            toastQuit?.show()
+
+                            handler = Handler(Looper.myLooper()!!)
+                            if (quitRunnable != null) {
+                                handler?.postDelayed(quitRunnable!!, 3500)
+                            }
+                        }
+                    } else {
+                        try {
+                            finish()
+                        } catch (e: IllegalArgumentException) {
+                            // nothing to do
+                        }
                     }
                 }
             }
         }
         //baseViewModel.trackFlush()
+    }
+
+    private fun isPreRequisite(): Boolean {
+        if (!clonerAllowed()) {
+            if (CheckCloner(this).check()) {
+                finish()
+                return false
+            }
+        }
+
+        if (!emulatorAllowed()) {
+            if (isEmulator()) {
+                finish()
+                return false
+            }
+        }
+
+        if (!rootAllowed()) {
+            if (MyRootBeer(this).isRooted) {
+                finish()
+                return false
+            }
+        }
+
+        return true
     }
 
     private fun remoteConfigSetup() {
