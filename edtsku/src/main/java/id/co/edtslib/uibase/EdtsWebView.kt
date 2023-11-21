@@ -2,6 +2,7 @@ package id.co.edtslib.uibase
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap
 import android.os.Build
 import android.print.PrintAttributes
 import android.print.PrintManager
@@ -53,6 +54,12 @@ open class EdtsWebView : WebView {
                     super.onPageFinished(view, url)
 
                     delegate?.onPageFinished(view, url)
+                }
+
+                override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                    super.onPageStarted(view, url, favicon)
+
+                    delegate?.onPageStarted(view, url, favicon)
                 }
 
                 override fun onPageCommitVisible(view: WebView?, url: String?) {

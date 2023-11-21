@@ -1,5 +1,6 @@
 package id.co.edtslib.uibase
 
+import android.graphics.Bitmap
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
@@ -27,4 +28,6 @@ interface EdtsWebDelegate {
     fun shouldOverrideUrlLoading(view: WebView?,
                                  request: WebResourceRequest?
     ): Boolean
+
+    fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?)
 }

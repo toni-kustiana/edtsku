@@ -1,6 +1,7 @@
 package id.co.edtslib.uibase
 
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.view.LayoutInflater
@@ -70,6 +71,9 @@ open class WebActivity: PopupActivity<ActivityWebBinding>() {
         return null
     }
 
+    protected open fun onPageStarted(url: String?, favicon: Bitmap?) {
+
+    }
     protected open fun errorView(): View? = null
     protected open fun showError(errorCode: Int?, errorDescription: String?) {
         binding.flError.isVisible = true
@@ -98,6 +102,10 @@ open class WebActivity: PopupActivity<ActivityWebBinding>() {
         binding.flProgressBar.isVisible = false
 
         binding.webView.delegate = object : EdtsWebDelegate {
+            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                onPageStarted(url, favicon)
+            }
+
             override fun onPageFinished(view: WebView?, url: String?) {
                 onPageFinished(url)
             }
