@@ -19,7 +19,7 @@ fun Context.checkValidSignature(packageName: String,
                                 remoteConfigKey: String,
                                 onCallback: (code: Int, signatures: List<String>?, sha1: String?) -> Unit) {
     val mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
-    mFirebaseRemoteConfig.fetch().addOnCompleteListener {
+    mFirebaseRemoteConfig.fetchAndActivate().addOnCompleteListener {
         if (it.isSuccessful) {
             val sha1 = mFirebaseRemoteConfig.getString(remoteConfigKey)
             if (sha1.isNotEmpty()) {
