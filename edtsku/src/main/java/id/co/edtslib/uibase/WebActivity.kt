@@ -97,7 +97,7 @@ open class WebActivity: PopupActivity<ActivityWebBinding>() {
 
     override fun setupPopup() {
         setupView()
-        initData()
+        processIntent()
     }
 
     protected open fun setupView() {
@@ -167,7 +167,7 @@ open class WebActivity: PopupActivity<ActivityWebBinding>() {
         }
     }
 
-    private fun initData() {
+    protected open fun processIntent() {
         val title = intent?.getStringExtra("title")
         if (title != null) {
             setTitle(title)
