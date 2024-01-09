@@ -33,6 +33,9 @@ open class EdtsWebView : WebView {
 
     var userAgentAdditionalInfo: Map<String, Any?>? = null
     var delegate: EdtsWebDelegate? = null
+    var urlFinished: String = ""
+    var isRedirected = false
+    var hasStarted = false
 
     init {
         post {
@@ -53,15 +56,24 @@ open class EdtsWebView : WebView {
 
             webViewClient = object : WebViewClient() {
                 override fun onPageFinished(view: WebView?, url: String?) {
-                    super.onPageFinished(view, url)
+                    if (!hasStarted) return
 
-                    delegate?.onPageFinished(view, url)
+                    if (url != null) {
+                        if (urlFinished != url && !isRedirected) {
+                            delegate?.onPageFinished(view, url)
+                            urlFinished = url
+                            hasStarted = false
+                            super.onPageFinished(view, url)
+                        }
+                    }
                 }
 
                 override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                    super.onPageStarted(view, url, favicon)
-
-                    delegate?.onPageStarted(view, url, favicon)
+                    hasStarted = true
+                    if (!isRedirected) {
+                        delegate?.onPageStarted(view, url, favicon)
+                        super.onPageStarted(view, url, favicon)
+                    }
                 }
 
                 override fun onPageCommitVisible(view: WebView?, url: String?) {
@@ -116,6 +128,7 @@ open class EdtsWebView : WebView {
                         return true
                     }
 
+                    isRedirected = delegate?.shouldOverrideUrlLoading(view, request) == true
                     return delegate?.shouldOverrideUrlLoading(view, request) == true
                 }
             }
