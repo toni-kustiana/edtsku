@@ -1,6 +1,8 @@
 package id.co.edtslib.uibase
 
 import android.graphics.Bitmap
+import android.net.http.SslError
+import android.webkit.SslErrorHandler
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
@@ -30,4 +32,11 @@ interface EdtsWebDelegate {
     ): Boolean
 
     fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?)
+
+    fun onReceivedSslError(
+        view: WebView?,
+        handler: SslErrorHandler?,
+        error: SslError?
+    )
+
 }

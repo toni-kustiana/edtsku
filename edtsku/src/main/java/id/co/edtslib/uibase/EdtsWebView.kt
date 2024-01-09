@@ -3,10 +3,12 @@ package id.co.edtslib.uibase
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
+import android.net.http.SslError
 import android.os.Build
 import android.print.PrintAttributes
 import android.print.PrintManager
 import android.util.AttributeSet
+import android.webkit.SslErrorHandler
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
@@ -94,6 +96,14 @@ open class EdtsWebView : WebView {
                     failingUrl: String?
                 ) {
                     delegate?.onReceivedError(view, errorCode, description, failingUrl)
+                }
+
+                override fun onReceivedSslError(
+                    view: WebView?,
+                    handler: SslErrorHandler?,
+                    error: SslError?
+                ) {
+                    delegate?.onReceivedSslError(view, handler, error)
                 }
 
                 override fun shouldOverrideUrlLoading(

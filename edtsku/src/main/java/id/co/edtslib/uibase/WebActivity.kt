@@ -3,6 +3,7 @@ package id.co.edtslib.uibase
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
+import android.net.http.SslError
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
@@ -74,6 +75,14 @@ open class WebActivity: PopupActivity<ActivityWebBinding>() {
     protected open fun onPageStarted(url: String?, favicon: Bitmap?) {
 
     }
+
+    protected open fun onReceivedSslError(
+        handler: SslErrorHandler?,
+        error: SslError?
+    ) {
+        handler?.cancel()
+    }
+
     protected open fun errorView(): View? = null
     protected open fun showError(errorCode: Int?, errorDescription: String?) {
         binding.flError.isVisible = true
@@ -147,6 +156,13 @@ open class WebActivity: PopupActivity<ActivityWebBinding>() {
                 return shouldOverrideUrlLoading(request?.url)
             }
 
+            override fun onReceivedSslError(
+                view: WebView?,
+                handler: SslErrorHandler?,
+                error: SslError?
+            ) {
+                onReceivedSslError(handler, error)
+            }
         }
     }
 
