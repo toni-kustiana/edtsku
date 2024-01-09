@@ -76,7 +76,8 @@ open class WebActivity: PopupActivity<ActivityWebBinding>() {
 
     }
 
-    protected open fun onReceivedSslError(
+    protected open fun onReceivedSslErrorHandler(
+        view: WebView?,
         handler: SslErrorHandler?,
         error: SslError?
     ) {
@@ -161,7 +162,7 @@ open class WebActivity: PopupActivity<ActivityWebBinding>() {
                 handler: SslErrorHandler?,
                 error: SslError?
             ) {
-                onReceivedSslError(handler, error)
+                onReceivedSslErrorHandler(view, handler, error)
             }
         }
     }
