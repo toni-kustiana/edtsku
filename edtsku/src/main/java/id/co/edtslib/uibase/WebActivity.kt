@@ -34,6 +34,8 @@ open class WebActivity: PopupActivity<ActivityWebBinding>() {
         }
     }
 
+    protected open val loadPostponeTime = 500L
+
     protected open fun onPageFinished(url: String?) {
         binding.flProgressBar.isVisible = false
     }
@@ -187,7 +189,9 @@ open class WebActivity: PopupActivity<ActivityWebBinding>() {
 
     protected fun load(url: String) {
         loading()
-        binding.webView.loadUrl(url)
+        binding.webView.postDelayed({
+            binding.webView.loadUrl(url)
+        }, loadPostponeTime)
     }
 
     protected fun reload() {
