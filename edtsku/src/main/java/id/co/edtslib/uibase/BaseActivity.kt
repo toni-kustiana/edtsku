@@ -63,6 +63,8 @@ abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
                 Tracker.trackPage(getTrackerPageName()!!, getTrackerPageId()!!)
             }
 
+            setPageDetail()
+
             onBackPressedDispatcher.addCallback {
                 if (canBack()) {
                     if (isHomeActivity()) {
@@ -105,6 +107,8 @@ abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
         }
         //baseViewModel.trackFlush()
     }
+
+    protected open fun setPageDetail() { }
 
     private fun isPreRequisite(): Boolean {
         if (!clonerAllowed()) {

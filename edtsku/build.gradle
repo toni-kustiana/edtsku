@@ -102,7 +102,7 @@ dependencies {
     implementation 'androidx.webkit:webkit:1.5.0'
 
     // tracker
-    implementation 'com.github.edtslib:tracker:2.3.6'
+    implementation 'com.github.edtslib:tracker:2.3.8'
 
     // splashscreen
     implementation "androidx.core:core-splashscreen:1.0.0"
