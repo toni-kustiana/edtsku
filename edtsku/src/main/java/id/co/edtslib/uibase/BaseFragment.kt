@@ -47,12 +47,12 @@ abstract class BaseFragment<viewBinding : ViewBinding>: Fragment() {
             Tracker.trackPage(getTrackerPageName()!!, getTrackerPageId()!!)
         }
 
-        setPageDetail()
+        initTrackerSetup()
     }
 
     abstract fun setup()
 
-    protected open fun setPageDetail() { }
+    protected open fun initTrackerSetup() { }
 
     override fun onDestroyView() {
         super.onDestroyView()
