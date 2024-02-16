@@ -22,7 +22,7 @@ import java.nio.charset.Charset
  */
 abstract class BaseDataSource {
 
-    protected suspend fun <T> getResult(isRefreshToken: Boolean = true, call: suspend () -> Response<T>): Result<T> {
+    protected suspend fun <T> getResult(call: suspend () -> Response<T>): Result<T> {
         try {
             val response = call()
             val code = response.code()
@@ -55,7 +55,6 @@ abstract class BaseDataSource {
             }
             else {
                 if (code == 401) {
-                    @Suppress("BlockingMethodInNonBlockingContext")
                     (return if (response.errorBody() != null) {
                         val bufferedSource: BufferedSource = response.errorBody()!!.source()
                         bufferedSource.request(Long.MAX_VALUE) // Buffer the entire body.
@@ -69,54 +68,33 @@ abstract class BaseDataSource {
                                 object : TypeToken<ApiResponse<Any>?>() {}.type
                             )
                             if (badResponse.data != null) {
-                                if (isRefreshToken) {
-                                    getResult(false, call)
-                                }
-                                else {
-                                    trackerFailed(reason = "401", url = response.raw().request.url.toString())
-                                    Result.unauthorized(badResponse.message)
-                                }
-                            }
-                            else {
-                                if (isRefreshToken) {
-                                    getResult(false, call)
-                                }
-                                else {
-                                    trackerFailed(
-                                        reason = "401",
-                                        url = response.raw().request.url.toString()
-                                    )
-                                    Result.unauthorized(badResponse.message)
-                                }
-                            }
-                        }
-                        catch (e: Exception) {
-                            if (isRefreshToken) {
-                                getResult(false, call)
+                                trackerFailed(reason = "401", url = response.raw().request.url.toString())
+                                Result.unauthorized(badResponse.message)
                             }
                             else {
                                 trackerFailed(
                                     reason = "401",
                                     url = response.raw().request.url.toString()
                                 )
-                                Result.unauthorized(json)
+                                Result.unauthorized(badResponse.message)
                             }
                         }
-                    } else {
-                        if (isRefreshToken) {
-                            getResult(false, call)
-                        }
-                        else {
+                        catch (e: Exception) {
                             trackerFailed(
                                 reason = "401",
                                 url = response.raw().request.url.toString()
                             )
-                            Result.unauthorized(null)
+                            Result.unauthorized(json)
                         }
+                    } else {
+                        trackerFailed(
+                            reason = "401",
+                            url = response.raw().request.url.toString()
+                        )
+                        Result.unauthorized(null)
                     })
                 } else
                     if (code == 400 || code == 500) {
-                        @Suppress("BlockingMethodInNonBlockingContext")
                         if (response.errorBody() != null) {
                             val bufferedSource: BufferedSource = response.errorBody()!!.source()
                             bufferedSource.request(Long.MAX_VALUE) // Buffer the entire body.
