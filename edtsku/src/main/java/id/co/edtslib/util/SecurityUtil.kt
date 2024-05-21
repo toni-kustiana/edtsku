@@ -12,7 +12,6 @@ import java.util.*
 class SecurityUtil {
 
     companion object {
-
         fun generateHashSha256(phoneNumber: String, publicKey: String): String {
             val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
             dateFormat.timeZone = TimeZone.getTimeZone("UTC")
