@@ -42,7 +42,7 @@ class SecurityUtil {
             val pem = if (beginIndex >= 0) {
                 val endIndex = privateKey.indexOf("-----END PRIVATE KEY-----", beginIndex+beginPem.length)
                 if (endIndex >= 0) {
-                    privateKey.substring(beginIndex+beginPem.length, endIndex)
+                    privateKey.substring(beginIndex+beginPem.length, endIndex).replace("\n", "")
                 }
                 else {
                     ""
