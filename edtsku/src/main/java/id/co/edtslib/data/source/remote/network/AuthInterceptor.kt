@@ -42,7 +42,7 @@ class AuthInterceptor(
         builder.addHeader("apps", apps)
         if (EdtsKu.privateKeyFileContent != null && EdtsKu.defaultPayload != null &&
             EdtsKu.enableSignature) {
-            privateKey = SecurityUtil.getPrivateKeyFromKeyStore(EdtsKu.privateKeyFileContent!!.split(", "))
+            privateKey = SecurityUtil.getPrivateKeyFromKeyStore(EdtsKu.privateKeyFileContent!!)
             val signature = getSignature(requestCopy, EdtsKu.defaultPayload!!)
             builder.addHeader("signature", signature)
         }
@@ -73,30 +73,6 @@ class AuthInterceptor(
             return SecurityUtil.signWithPayload(body, privateKey)
         }
 
-        /**
-         * Unused for now
-        val query = requestCopy.url.encodedQuery
-        val queryValue = extractQuery(query)
-        if (queryValue.isNotEmpty()) {
-            return SecurityUtil.signWithPayload(queryValue, privateKey)
-        }
-        */
-
-        /**
-         * Unused for now
-        val pathParamReverseIdx = requestCopy.header("pathSignature")
-        if (pathParamReverseIdx != null) {
-            return try {
-                val pathIdx = pathParamReverseIdx.toInt()
-                val path = requestCopy.url.encodedPath
-                val pathParam = extractPathParam(path, pathIdx)
-                SecurityUtil.signWithPayload(pathParam, privateKey)
-            } catch (_: Exception) {
-                SecurityUtil.signWithPayload(defaultPayload, privateKey)
-            }
-        }
-        */
-
         return SecurityUtil.signWithPayload(defaultPayload, privateKey)
     }
 
@@ -112,33 +88,4 @@ class AuthInterceptor(
             ""
         }
     }
-
-    private fun extractQuery(query: String?): String {
-        if (query != null) {
-            val excluded = mutableListOf("page", "unpaged", "sort", "size")
-            val queries = query.split("&")
-            if (queries.isNotEmpty()) {
-                for (q in queries) {
-                    val key = q.split("=")[0]
-                    if (!excluded.contains(key)) {
-                        return q.split("=")[1]
-                    }
-                }
-            }
-        }
-        return ""
-    }
-
-    private fun extractPathParam(path: String, idx: Int): String {
-        val pathSegments = path.split("/")
-        val size = pathSegments.size
-
-        val pathIndex = size-1-idx
-        return if (pathIndex < size) {
-            pathSegments[pathIndex]
-        } else {
-            ""
-        }
-    }
-
 }

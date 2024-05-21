@@ -36,23 +36,25 @@ class SecurityUtil {
         }
 
         @Throws(IOException::class, NoSuchAlgorithmException::class, InvalidKeySpecException::class)
-        fun getPrivateKeyFromKeyStore(privateKeyList: List<String>): PrivateKey? {
-            var privateKey = ""
-            var inKey = false
-            for (line in privateKeyList) {
-                if (!inKey) {
-                    if (line.startsWith("-----BEGIN ") && line.endsWith(" PRIVATE KEY-----")) {
-                        inKey = true
-                    }
-                } else {
-                    if (line.startsWith("-----END ") && line.endsWith(" PRIVATE KEY-----")) {
-                        break
-                    }
-                    privateKey += line
+        fun getPrivateKeyFromKeyStore(privateKey: String): PrivateKey? {
+            val beginPem = "-----BEGIN PRIVATE KEY-----"
+            val beginIndex = privateKey.indexOf(beginPem)
+
+            val pem = if (beginIndex >= 0) {
+                val endIndex = privateKey.indexOf("-----END PRIVATE KEY-----", beginIndex+beginPem.length)
+                if (endIndex >= 0) {
+                    privateKey.substring(beginIndex+beginPem.length, endIndex)
+                }
+                else {
+                    ""
                 }
             }
+            else {
+                ""
+            }
+
             return try {
-                val encoded = Base64.decode(privateKey, Base64.NO_WRAP)
+                val encoded = Base64.decode(pem, Base64.NO_WRAP)
                 val keySpec = PKCS8EncodedKeySpec(encoded)
                 val kf = KeyFactory.getInstance("RSA")
                 kf.generatePrivate(keySpec)
