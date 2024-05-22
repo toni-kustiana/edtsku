@@ -36,13 +36,15 @@ class SecurityUtil {
 
         @Throws(IOException::class, NoSuchAlgorithmException::class, InvalidKeySpecException::class)
         fun getPrivateKeyFromKeyStore(privateKey: String): PrivateKey? {
-            val beginPem = "-----BEGIN PRIVATE KEY-----"
-            val beginIndex = privateKey.indexOf(beginPem)
+            val startPattern = "-----BEGIN.*PRIVATE KEY-----".toRegex()
+            val startTag = startPattern.find(privateKey)
 
-            val pem = if (beginIndex >= 0) {
-                val endIndex = privateKey.indexOf("-----END PRIVATE KEY-----", beginIndex+beginPem.length)
-                if (endIndex >= 0) {
-                    privateKey.substring(beginIndex+beginPem.length, endIndex).trim()
+            val pem = if (startTag?.value != null) {
+                val endPattern = "-----END.*PRIVATE KEY-----".toRegex()
+
+                val endTag = endPattern.find(privateKey, startTag.range.first+startTag.value.length)
+                if (endTag?.value != null) {
+                    privateKey.substring(startTag.range.first+startTag.value.length, endTag.range.first).trim()
                 }
                 else {
                     ""
