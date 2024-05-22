@@ -44,7 +44,7 @@ class SecurityUtil {
 
                 val endTag = endPattern.find(privateKey, startTag.range.first+startTag.value.length)
                 if (endTag?.value != null) {
-                    privateKey.substring(startTag.range.first+startTag.value.length, endTag.range.first).trim()
+                    privateKey.substring(startTag.range.first+startTag.value.length, endTag.range.first).trimStart()
                 }
                 else {
                     ""
