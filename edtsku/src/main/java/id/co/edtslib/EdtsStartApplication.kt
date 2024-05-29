@@ -24,6 +24,9 @@ class EdtsKu {
         var enableSignature = false
         var defaultPayload: String? = null
         var privateKeyFileContent: String? = null
+        var pemStartTag = ""
+        var pemEndTag = ""
+
 
         var timeout: Long? = null
 
