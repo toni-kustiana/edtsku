@@ -1,6 +1,7 @@
 package id.co.edtslib.util
 
 import android.util.Base64
+import id.co.edtslib.EdtsKu
 import java.io.*
 import java.nio.charset.StandardCharsets
 import java.security.*
@@ -36,11 +37,11 @@ class SecurityUtil {
 
         @Throws(IOException::class, NoSuchAlgorithmException::class, InvalidKeySpecException::class)
         fun getPrivateKeyFromKeyStore(privateKey: String): PrivateKey? {
-            val startPattern = "-----BEGIN.*PRIVATE KEY-----".toRegex()
+            val startPattern = EdtsKu.pemStartTag.toRegex()
             val startTag = startPattern.find(privateKey)
 
             val pem = if (startTag?.value != null) {
-                val endPattern = "-----END.*PRIVATE KEY-----".toRegex()
+                val endPattern = EdtsKu.pemEndTag.toRegex()
 
                 val endTag = endPattern.find(privateKey, startTag.range.first+startTag.value.length)
                 if (endTag?.value != null) {
