@@ -1,5 +1,6 @@
 package id.co.edtslib.data.source.remote.network
 
+import android.util.Base64
 import id.co.edtslib.EdtsKu
 import id.co.edtslib.data.source.local.HttpHeaderLocalSource
 import id.co.edtslib.util.SecurityUtil
@@ -45,6 +46,10 @@ class AuthInterceptor(
             privateKey = SecurityUtil.getPrivateKeyFromKeyStore(EdtsKu.privateKeyFileContent!!)
             val signature = getSignature(requestCopy, EdtsKu.defaultPayload!!)
             builder.addHeader("signature", signature)
+        }
+
+        if (EdtsKu.sendSha1 && EdtsKu.signatures?.isNotEmpty() == true) {
+            builder.addHeader("sha1", EdtsKu.signatures!!.map { Base64.encode(it.toByteArray(), Base64.DEFAULT) }.joinToString { "," })
         }
 
         builder.removeHeader("pathSignature")

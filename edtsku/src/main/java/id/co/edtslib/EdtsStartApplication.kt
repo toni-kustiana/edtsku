@@ -3,6 +3,7 @@ package id.co.edtslib
 import android.app.Application
 import id.co.edtslib.di.*
 import id.co.edtslib.tracker.Tracker
+import id.co.edtslib.util.getSignatures
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
@@ -27,12 +28,15 @@ class EdtsKu {
         var pemStartTag = ""
         var pemEndTag = ""
 
+        var sendSha1 = true
+        var signatures: List<String>? = null
 
         var timeout: Long? = null
 
         fun init(application: Application, baseUrlApi: String, refreshTokenPath: String, modules: List<Module>) {
             EdtsKu.baseUrlApi = baseUrlApi
             refreshTokenUrlApi = refreshTokenPath
+            signatures = application.getSignatures(packageName)
 
             with(application) {
                 startKoin {
@@ -60,6 +64,7 @@ class EdtsKu {
 
             EdtsKu.baseUrlApi = baseUrlApi
             refreshTokenUrlApi = refreshTokenPath
+            signatures = application.getSignatures(packageName)
 
             with(application) {
                 startKoin {
@@ -88,6 +93,7 @@ class EdtsKu {
 
             EdtsKu.baseUrlApi = baseUrlApi
             refreshTokenUrlApi = refreshTokenPath
+            signatures = application.getSignatures(packageName)
 
             with(application) {
                 startKoin {
