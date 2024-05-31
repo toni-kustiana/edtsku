@@ -49,7 +49,7 @@ class AuthInterceptor(
         }
 
         if (EdtsKu.sendSha1 && EdtsKu.signatures?.isNotEmpty() == true) {
-            builder.addHeader("sha1", EdtsKu.signatures!!.map { Base64.encode(it.toByteArray(), Base64.DEFAULT) }.joinToString { "," })
+            builder.addHeader("sha1", EdtsKu.signatures!!.joinToString(","))
         }
 
         builder.removeHeader("pathSignature")
