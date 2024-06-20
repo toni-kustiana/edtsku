@@ -30,6 +30,8 @@ abstract class BaseFragment<viewBinding : ViewBinding>: Fragment() {
 
     fun isNotNullBinding() = _binding != null
 
+    protected open fun isMyFragmentVisible() = isVisible
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -62,8 +64,10 @@ abstract class BaseFragment<viewBinding : ViewBinding>: Fragment() {
     override fun onResume() {
         super.onResume()
 
-        if (getTrackerPageName() != null) {
-            Tracker.resumePage(getTrackerPageName()!!, getTrackerPageId()!!)
+        if (isMyFragmentVisible()) {
+            if (getTrackerPageName() != null) {
+                Tracker.resumePage(getTrackerPageName()!!, getTrackerPageId()!!)
+            }
         }
     }
 }
