@@ -44,8 +44,10 @@ class AuthInterceptor(
         if (EdtsKu.privateKeyFileContent != null && EdtsKu.defaultPayload != null &&
             EdtsKu.enableSignature) {
             privateKey = SecurityUtil.getPrivateKeyFromKeyStore(EdtsKu.privateKeyFileContent!!)
-            val signature = getSignature(requestCopy, EdtsKu.defaultPayload!!)
-            builder.addHeader("signature", signature)
+            if (privateKey != null) {
+                val signature = getSignature(requestCopy, EdtsKu.defaultPayload!!)
+                builder.addHeader("signature", signature)
+            }
         }
 
         if (EdtsKu.sendSha1 && EdtsKu.signatures?.isNotEmpty() == true) {

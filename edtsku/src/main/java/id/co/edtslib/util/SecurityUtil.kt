@@ -2,6 +2,9 @@ package id.co.edtslib.util
 
 import android.util.Base64
 import id.co.edtslib.EdtsKu
+import id.co.edtslib.tracker.Tracker
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.*
 import java.nio.charset.StandardCharsets
 import java.security.*
@@ -55,12 +58,26 @@ class SecurityUtil {
                 ""
             }
 
+            val message = StringBuilder()
             return try {
                 val encoded = Base64.decode(pem, Base64.NO_WRAP)
+                if (encoded.isEmpty()) {
+                    message.append("$pem is empty.")
+                }
                 val keySpec = PKCS8EncodedKeySpec(encoded)
                 val kf = KeyFactory.getInstance("RSA")
-                kf.generatePrivate(keySpec)
+                val res = kf.generatePrivate(keySpec)
+                if (res == null) {
+                    message.append("generatePrivate is null. al: ${kf.algorithm} pr: ${kf.provider.name} ")
+                }
+
+                if (message.isNotEmpty()) {
+                    trackerFailed(message.toString(), "enkripsi")
+                }
+                res
             } catch (e: Exception) {
+                message.append("error: ${e.message}.")
+                trackerFailed(message.toString(), "enkripsi")
                 null
             }
         }
@@ -73,6 +90,17 @@ class SecurityUtil {
             return Base64.encodeToString(signature, Base64.NO_WRAP)
         }
 
+        private fun trackerFailed(reason: String?, url: String?) {
+            try {
+                Tracker.trackSubmissionFailed(name = "api_failed",
+                    category = "",
+                    reason = reason,
+                    details = url)
+            }
+            catch (ignore: Exception) {
+
+            }
+        }
     }
 
 }
