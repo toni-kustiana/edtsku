@@ -2,17 +2,24 @@ package id.co.edtslib.data
 
 import id.co.edtslib.data.source.local.HttpHeaderLocalSource
 import id.co.edtslib.data.source.remote.SessionRemoteDataSource
+import id.co.edtslib.tracker.di.ConfigurationLocalSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 abstract class NetworkBoundProcessResource<ResultType, RequestType>(
     private val localDataSource: HttpHeaderLocalSource,
     private val sessionRemoteDataSource: SessionRemoteDataSource
-) {
+): KoinComponent {
+    private val configurationLocalSource: ConfigurationLocalSource by inject()
 
     private val result: Flow<Result<ResultType>> = flow {
         emit(Result.loading())
+
+        localDataSource.setHeader("session_id", configurationLocalSource.getSessionId())
+        localDataSource.setHeader("event_id", configurationLocalSource.getEventId().toString())
 
         val response = createCall()
         when (response.status) {
