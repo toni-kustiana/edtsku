@@ -39,6 +39,7 @@ abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
 
     abstract fun getTrackerPageName(): String?
     fun getTrackerPageId() = if (getTrackerPageName() == null) null else "${getTrackerPageName()}_${now}"
+    open fun onMinimized() {}
 
     abstract fun setup()
     
@@ -162,12 +163,13 @@ abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
         isMinimizing = false
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onStop() {
+        super.onStop()
         isMinimizing = true
         binding.root.postDelayed({
             if (isMinimizing) {
                 Tracker.trackMinimizeApplication()
+                onMinimized()
                 isMinimized = true
             }
         }, 2500)
