@@ -153,6 +153,11 @@ abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
         }
     }
 
+    override fun onPause() {
+        isMinimizing = true
+        super.onPause()
+    }
+
     override fun onStart() {
         super.onStart()
         if (isMinimized) {
@@ -165,7 +170,6 @@ abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        isMinimizing = true
         binding.root.postDelayed({
             if (isMinimizing) {
                 Tracker.trackMinimizeApplication()
