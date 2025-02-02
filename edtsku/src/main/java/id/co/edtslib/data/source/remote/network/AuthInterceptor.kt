@@ -1,6 +1,5 @@
 package id.co.edtslib.data.source.remote.network
 
-import android.util.Base64
 import id.co.edtslib.EdtsKu
 import id.co.edtslib.data.source.local.HttpHeaderLocalSource
 import id.co.edtslib.util.SecurityUtil
@@ -36,7 +35,12 @@ class AuthInterceptor(
         if (headers != null) {
             for ((k, v) in headers) {
                 if (v != null) {
-                    builder.addHeader(k, v)
+                    try {
+                        builder.addHeader(k, v)
+                    }
+                    catch (ignore: Exception) {
+
+                    }
                 }
             }
         }
