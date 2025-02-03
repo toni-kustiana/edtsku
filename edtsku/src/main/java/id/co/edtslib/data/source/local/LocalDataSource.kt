@@ -57,5 +57,8 @@ abstract class LocalDataSource<T>(private val sharedPreferences: SharedPreferenc
         catch (ignore: Exception) {
             return null
         }
+        catch (ignore: Error) {
+            return null
+        }
     }
 }
