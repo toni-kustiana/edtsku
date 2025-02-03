@@ -2,28 +2,26 @@ package id.co.edtslib.data
 
 import id.co.edtslib.data.source.local.HttpHeaderLocalSource
 import id.co.edtslib.data.source.remote.SessionRemoteDataSource
-import id.co.edtslib.tracker.Tracker
 import id.co.edtslib.tracker.di.ConfigurationLocalSource
 import kotlinx.coroutines.flow.*
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-abstract class NetworkBoundGetResource<ResultType, RequestType>(
+abstract class NetworkBoundGetResource<ResultType, ResponseType>(
     private val localDataSource: HttpHeaderLocalSource,
     private val sessionRemoteDataSource: SessionRemoteDataSource
 ): KoinComponent {
     private val configurationLocalSource: ConfigurationLocalSource by inject()
 
-    protected fun shouldSave() = false
     protected abstract fun getCached(): Flow<ResultType>
     protected abstract fun shouldFetch(data: ResultType?): Boolean
-    protected abstract suspend fun createCall(): Result<RequestType>
-    protected abstract suspend fun saveCallResult(data: RequestType)
+    protected abstract suspend fun createCall(): Result<ResponseType>
+    protected abstract suspend fun saveCallResult(data: ResponseType): ResultType
 
     private val result: Flow<Result<ResultType>> = flow {
         emit(Result.loading())
-        val dbSource = getCached().first()
-        if (shouldFetch(dbSource)) {
+        val dbSource = getCached()
+        if (shouldFetch(dbSource.first())) {
             localDataSource.setHeader("session_id", configurationLocalSource.getSessionId())
             localDataSource.setHeader("event_id", configurationLocalSource.getEventId().toString())
 
@@ -92,13 +90,13 @@ abstract class NetworkBoundGetResource<ResultType, RequestType>(
             }
         } else {
             emitAll(
-                getCached().map {
+                dbSource.map {
                     Result.success(it)
                 }
             )
         }
     }
 
-    open fun isValidData(response: Result<RequestType>) = response.data != null
+    open fun isValidData(response: Result<ResponseType>) = response.data != null
     fun asFlow(): Flow<Result<ResultType>> = result
 }
