@@ -37,7 +37,7 @@ abstract class NetworkBoundGetResource<ResultType, ResponseType>(
                         )
                     } else {
                         emitAll(
-                            getCached().map {
+                            dbSource.map {
                                 Result.error(
                                     response.code,
                                     response.message,
