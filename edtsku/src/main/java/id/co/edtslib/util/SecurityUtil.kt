@@ -40,26 +40,25 @@ class SecurityUtil {
 
         @Throws(IOException::class, NoSuchAlgorithmException::class, InvalidKeySpecException::class)
         fun getPrivateKeyFromKeyStore(privateKey: String): PrivateKey? {
-            val startPattern = EdtsKu.pemStartTag.toRegex()
-            val startTag = startPattern.find(privateKey)
+            val message = StringBuilder()
+            return try {
+                val startPattern = EdtsKu.pemStartTag.toRegex()
+                val startTag = startPattern.find(privateKey)
 
-            val pem = if (startTag?.value != null) {
-                val endPattern = EdtsKu.pemEndTag.toRegex()
+                val pem = if (startTag?.value != null) {
+                    val endPattern = EdtsKu.pemEndTag.toRegex()
 
-                val endTag = endPattern.find(privateKey, startTag.range.first+startTag.value.length)
-                if (endTag?.value != null) {
-                    privateKey.substring(startTag.range.first+startTag.value.length, endTag.range.first).trimStart()
+                    val endTag = endPattern.find(privateKey, startTag.range.first+startTag.value.length)
+                    if (endTag?.value != null) {
+                        privateKey.substring(startTag.range.first+startTag.value.length, endTag.range.first).trimStart()
+                    }
+                    else {
+                        ""
+                    }
                 }
                 else {
                     ""
                 }
-            }
-            else {
-                ""
-            }
-
-            val message = StringBuilder()
-            return try {
                 val encoded = Base64.decode(pem, Base64.NO_WRAP)
                 if (encoded.isEmpty()) {
                     message.append("$pem is empty.")
@@ -79,7 +78,12 @@ class SecurityUtil {
                 message.append("error: ${e.message}.")
                 trackerFailed(message.toString(), "enkripsi")
                 null
+            } catch (e: Error) {
+                message.append("error: ${e.message}.")
+                trackerFailed(message.toString(), "enkripsi")
+                null
             }
+
         }
 
         fun signWithPayload(payload: String, privateKey: PrivateKey?): String {

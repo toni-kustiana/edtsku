@@ -18,13 +18,21 @@ abstract class LocalDataSource<T>(private val sharedPreferences: SharedPreferenc
             return
         }
 
-        val editor: SharedPreferences.Editor = sharedPreferences.edit()
-
-        editor.putString(getKeyName(), Gson().toJson(data))
-        if (expiredInterval() > 0) {
-            editor.putLong(getKeyTimeName(), Date().time)
+        try {
+            val editor: SharedPreferences.Editor = sharedPreferences.edit()
+            editor.putString(getKeyName(), Gson().toJson(data))
+            if (expiredInterval() > 0) {
+                editor.putLong(getKeyTimeName(), Date().time)
+            }
+            editor.apply()
         }
-        editor.apply()
+        catch (ignore: Exception) {
+            clear()
+        }
+        catch (ignore: Error) {
+            clear()
+        }
+
     }
 
     open fun get() = flow {
