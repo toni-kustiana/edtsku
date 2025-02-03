@@ -158,6 +158,13 @@ abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
         super.onPause()
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (getTrackerPageName() != null) {
+            Tracker.resumePage(getTrackerPageName()!!, getTrackerPageId()!!)
+        }
+    }
+
     override fun onStart() {
         super.onStart()
         if (isMinimized) {
