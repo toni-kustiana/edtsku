@@ -16,7 +16,7 @@ abstract class NetworkBoundGetResource<ResultType, ResponseType>(
     protected abstract fun getCached(): Flow<ResultType>
     protected abstract fun shouldFetch(data: ResultType?): Boolean
     protected abstract suspend fun createCall(): Result<ResponseType>
-    protected abstract suspend fun saveCallResult(data: ResponseType): ResultType
+    protected abstract suspend fun saveCallResult(data: ResponseType)
 
     private val result: Flow<Result<ResultType>> = flow {
         emit(Result.loading())
