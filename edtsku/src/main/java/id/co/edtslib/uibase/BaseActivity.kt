@@ -48,6 +48,8 @@ abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
     open fun clonerAllowed() = true
     open fun emulatorAllowed() = true
     open fun rootAllowed() = true
+    open fun backTrackerLabel() = "Kembali"
+    open fun backTrackerCategory() = "Kembali Ke Halaman Sebelumnya"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +70,10 @@ abstract class BaseActivity<viewBinding: ViewBinding>: AppCompatActivity() {
 
             onBackPressedDispatcher.addCallback {
                 if (canBack()) {
+                    Tracker.trackClick(
+                        name = backTrackerLabel(),
+                        category = backTrackerCategory()
+                    )
                     if (isHomeActivity()) {
                         if (quitRunnable != null) {
                             handler?.removeCallbacks(quitRunnable!!)
